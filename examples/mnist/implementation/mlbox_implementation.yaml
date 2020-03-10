@@ -1,6 +1,7 @@
 implementation_type: docker
-docker_runtime: nvidia-docker # OR docker
-docker_args: []
 image: mlperf/mlbox-example-mnist
+docker_runtime: nvidia-docker # OR docker
+configure: build # OR pull
+docker_args: []
 command: []
 args: []

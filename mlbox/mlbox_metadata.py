@@ -79,6 +79,7 @@ class DockerImplementation:
         self.image = None
         self.command = None
         self.args = None
+        self.configure = None
 
     def set_from_dict(self, d):
         self.docker_runtime = d['docker_runtime']
@@ -86,5 +87,9 @@ class DockerImplementation:
         self.image = d['image']
         self.command = d['command']
         self.args = d['args']
+        self.configure = d.get('configure', 'build')
 
-
+    def __str__(self):
+        return "DockerImplementation(dockerfile_path={}, image={}, docker_runtime={})".format(
+            self.dockerfile_path, self.image, self.docker_runtime
+        )

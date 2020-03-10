@@ -1,0 +1,35 @@
+default: local
+
+
+local:
+  runner: docker
+  build_args:
+    http_proxy: 'PROXY_SERVER_IF_NEEDED'
+    https_proxy: 'PROXY_SERVER_IF_NEEDED'
+  run_args:
+    http_proxy: 'PROXY_SERVER_IF_NEEDED'
+    https_proxy: 'PROXY_SERVER_IF_NEEDED'
+
+
+remote_local:
+  runner: docker
+  docker_runtime: docker
+  build_args:
+    http_proxy: 'PROXY_SERVER_IF_NEEDED'
+    https_proxy: 'PROXY_SERVER_IF_NEEDED'
+  run_args:
+    http_proxy: 'PROXY_SERVER_IF_NEEDED'
+    https_proxy: 'PROXY_SERVER_IF_NEEDED'
+
+
+remote:
+  runner: ssh
+  host: HOST
+  user: USER
+  runtime:
+    remote_dir: /tmp/mlbox
+    sync: true
+  mlbox:
+    remote_dir: /tmp/mlbox/examples/mnist
+    sync: true
+  remote_local: remote_local

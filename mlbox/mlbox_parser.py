@@ -10,7 +10,7 @@ except ImportError:
     from yaml import Loader, Dumper
 
 
-import mlbox_metadata
+from mlbox import mlbox_metadata
 
 class MLBoxDir(object):
     """A way to access files in an mlbox directory."""
@@ -137,7 +137,7 @@ def create_metadata(box_dir):
     print("listing: {}".format(mlbox.tasks_dir))
     for task_name in os.listdir(mlbox.tasks_dir):
         if task_name not in mlbox.tasks:
-            print('WARNING: Found tasks/{} but no such task in mlbox.ymal'.format(task_naem))
+            print('WARNING: Found tasks/{} but no such task in mlbox.ymal'.format(task_name))
             continue
         print('Discovering defaults for task {}'.format(task_name))
         for default_name in glob.glob(os.path.join(mlbox.tasks_dir, task_name, '*.yaml')):

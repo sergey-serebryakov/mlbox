@@ -8,10 +8,10 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
-import mlbox_parser
+from mlbox import mlbox_parser
 
 
-def get_commandline_args():
+def get_commandline_args(mlbox: str = None, user_args: list = None):
     """Parses commandline.
     For example:
     box/path:TASK/params --params=/foo/bar
@@ -19,15 +19,19 @@ def get_commandline_args():
     'box/path', {'params': '/foo/bar'}
     """
     print(sys.argv)
-    mlbox = sys.argv[1]
+    mlbox = mlbox if mlbox is not None else sys.argv[1]
     parts = mlbox.split(':')
     mlbox_dir = parts[0]
-    task_and_inputs = parts[1]
-    task = task_and_inputs.split('/')[0]
-    input_group = task_and_inputs.split('/')[1]
+    if len(parts) == 1:
+        task = input_group = None
+    else:
+        task_and_inputs = parts[1]
+        task = task_and_inputs.split('/')[0]
+        input_group = task_and_inputs.split('/')[1]
 
     io = {}
-    for arg in sys.argv[2:]:
+    user_args = user_args if user_args is not None else sys.argv[2:]
+    for arg in user_args:
         args = arg.split('=')
         name = args[0].strip('--')
         val = args[1]
@@ -117,12 +121,14 @@ def run_docker(docker_name, input_map):
     #     sys.exit(1)
 
 
-def construct_docker_run_command(mlbox, mount_volumes, kw_args):
-    volumes_str = ' '.join(
-          ['-v {}:{}'.format(t[0], t[1]) for t in mount_volumes.items()])
+def construct_docker_run_command(mlbox, mount_volumes, kw_args, run_args=None):
+    volumes_str = ' '.join(['-v {}:{}'.format(t[0], t[1]) for t in mount_volumes.items()])
+    run_args = run_args if run_args is not None else {}
+    docker_args_str = ' '.join(['-e {}:{}'.format(t[0], t[1]) for t in run_args.items()])
     args_str = ' '.join(sorted(['--{}={}'.format(k, v) for k, v in kw_args.items()]))
-    cmd = 'sudo {} run {} --net=host --privileged=true -t {} {}'.format(mlbox.implementation.docker_runtime,
-          volumes_str, mlbox.implementation.image, args_str)
+    cmd = 'sudo {} run {} {} --net=host --privileged=true -t {} {}'.format(
+        mlbox.implementation.docker_runtime, volumes_str, docker_args_str, mlbox.implementation.image, args_str
+    )
     return cmd
 
 def construct_docker_build_command(mlbox_root, image_name):
@@ -144,6 +150,8 @@ def get_args_with_defaults(mlbox, overrides, task_name, defaults=None):
     for io_name in io_name_list:
         if io_name in overrides:
             args[io_name] = overrides[io_name]
+
+
         elif defaults not in task.defaults:
             print('Checked task: {}'.format(task.name))
             raise Exception('No such defaults for: {}'.format(defaults))
