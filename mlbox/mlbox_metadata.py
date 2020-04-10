@@ -93,3 +93,36 @@ class DockerImplementation:
         return "DockerImplementation(dockerfile_path={}, image={}, docker_runtime={})".format(
             self.dockerfile_path, self.image, self.docker_runtime
         )
+
+
+class PythonImplementation(object):
+
+    TYPE = 'python'
+
+    def __init__(self, cfg: dict):
+        self.force_reconfigure = cfg.get('force_reconfigure', False)
+        self.interpreter = cfg.get('interpreter', 'current')
+        self.virtualenv = cfg.get('virtualenv', None)
+        self.conda = cfg.get('conda', None)
+        self.system = cfg.get('system', None)
+        self.pipenv = cfg.get('pipenv', None)
+        self.requirements = cfg.get('requirements', None)
+        self.entrypoint = cfg.get('entrypoint', None)
+
+        if self.interpreter in (None, '', 'current'):
+            self.interpreter = 'system'
+            self.system = {'interpreter': sys.executable}
+
+        self.task = None
+
+    @property
+    def interpreter_config(self) -> dict:
+        config = getattr(self, self.interpreter, None)
+        if config is None:
+            raise ValueError("Incorrect Python interpreter ({})".format(self.interpreter))
+        return config
+
+    def __str__(self):
+        return "PythonImplementation(interpreter={}, config={}, force_reconfigure={}, requirements={}, "\
+               "entrypoint={})".format(self.interpreter, self.interpreter_config, self.force_reconfigure,
+                                       self.requirements, self.entrypoint)

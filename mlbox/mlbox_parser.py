@@ -88,6 +88,23 @@ def load_yaml(path):
         return yaml.load(f.read(), Loader=Loader)
 
 
+def create_docker_metadata(mlbox: mlbox_metadata.MLBox, impl: dict) -> mlbox_metadata.MLBox:
+    docker_impl = mlbox_metadata.DockerImplementation()
+    docker_impl.set_from_dict(impl)
+    docker_impl.dockerfile_path = os.path.join(mlbox.implementation_dir, 'docker/dockerfiles/Dockerfile')
+    print('Discovered image: {}'.format(docker_impl.image))
+
+    mlbox.implementation = docker_impl
+    mlbox.implementation_type = 'docker'
+    return mlbox
+
+
+def create_python_metadata(mlbox: mlbox_metadata.MLBox, impl: dict) -> mlbox_metadata.MLBox:
+    mlbox.implementation = mlbox_metadata.PythonImplementation(impl)
+    mlbox.implementation_type = mlbox.implementation.TYPE
+    return mlbox
+
+
 def create_metadata(box_dir):
     box_dir = os.path.abspath(box_dir)
     mlbox = mlbox_metadata.MLBox(box_dir)
@@ -122,16 +139,12 @@ def create_metadata(box_dir):
 
     impl = load_yaml(mlbox.implementation_file)
 
-    if impl['implementation_type'] != 'docker':
-        raise Exception('Only docker supported.')
-    docker_impl = mlbox_metadata.DockerImplementation()
-    docker_impl.set_from_dict(impl)
-    docker_impl.dockerfile_path = os.path.join(
-            mlbox.implementation_dir,
-            'docker/dockerfiles/Dockerfile')
-    mlbox.implementation_type = 'docker'
-    mlbox.implementation = docker_impl
-    print('Discovered image: {}'.format(docker_impl.image))
+    if impl['implementation_type'] == 'docker':
+        mlbox = create_docker_metadata(mlbox, impl)
+    elif impl['implementation_type'] == 'python':
+        mlbox = create_python_metadata(mlbox, impl)
+    else:
+        raise ValueError('Unsupported MLBox implementation ({}).'.format(impl['implementation_type']))
 
     # Find the defaults for tasks
     print("listing: {}".format(mlbox.tasks_dir))
@@ -153,6 +166,7 @@ def create_metadata(box_dir):
 
 def main():
     create_metadata(sys.argv[1])
+
 
 if __name__ == '__main__':
     main()

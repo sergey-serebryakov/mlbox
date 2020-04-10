@@ -1,5 +1,7 @@
 default: local
 
+python:
+  runner: python
 
 local:
   runner: docker

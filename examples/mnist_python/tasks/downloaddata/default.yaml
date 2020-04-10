@@ -1,0 +1,10 @@
+# All parameters here are either file names or directories. Every script compatible with MLPerf specs accepts at
+# least one parameter : `--mlbox_task`. In addition to that, the following parameters are also passed to the script:
+data_dir: data
+log_dir: log
+
+# All other parameters such as URL for a dataset or parameters for a optimization algorithm need to be defined in a
+# in a file and it needs to be present here. Parameters for mlbox runner need to go into a mlbox implementation file.
+
+# The command line for this task is the following (exact values may differ depending on a runner (local/docker/etc.)):
+# --mlbox_task=downloaddata --log_dir=log --data_dir=data
