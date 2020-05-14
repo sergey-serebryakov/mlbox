@@ -1,0 +1,36 @@
+implementation_type: python
+
+# If true and python interpreter is one of [virtualenv, conda, pipenv] and it exists at the configure phase,
+# delete and rebuild it.
+force_reconfigure: true
+
+# Python interpreter: virtualenv, conda, system, pipenv.
+# Alternatively, if not present or empty/null, use current interpreter (sys.executable)
+interpreter: 'virtualenv'
+
+# Parameters for each interpreter - which one to use depends on `interpreter` value. Locations below, if relative,
+# are relative to workspace.
+# If location it not absolute, consider that relative to MLBox root directory.
+virtualenv:
+  base_interpreter: python3.6
+  location: implementation/python_env
+
+conda:
+  name: 'mnist_python'
+  version: '3.7'
+  conda: 'C:\projects\anaconda3\Scripts\conda.exe'
+
+system:
+  interpreter:
+
+pipenv:
+  base_interpreter:
+  pipenv:
+
+# A custom path for the requirements file. If empty or null, the following is used: implementation/src/requirements.txt
+# Alternatively, it can be a list or whitespace-separated string of python packages.
+requirements: implementation/src/requirements.txt
+# requirements: PyYAML==5.3 tensorflow==2.1.0 requests[security]
+
+# MLBox entry point (relative to MLBox root folder)
+entrypoint: implementation/src/mnist.py

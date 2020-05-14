@@ -1,0 +1,13 @@
+# If platform config/runner not specified on a command line, use reference python runner to run this MLBox on a
+# local machine using python environment.
+implementation_type: python
+
+# This simple project depends only on standard python packages, no need to use conda/virtualenv.
+interpreter: system
+
+# This is the path to system or or any other interpreter. If None, use sys.executable
+system:
+  interpreter:
+
+# MLBox entry point (relative to MLBox root folder)
+entrypoint: implementation/src/hello_world.py

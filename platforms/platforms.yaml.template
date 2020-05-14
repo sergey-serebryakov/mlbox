@@ -1,8 +1,24 @@
+# One platform file can configure multiple different runners/platforms. The difference between platforms/runners is
+# the following:
+#   A runner runs mlbox, for instance, locally using system python or docker/singularity containers.
+#   A platform is an optional configuration that additionally configures runners. Platform configuration can contain
+#      such information as proxy servers, additional build args for docker runtime, ssh credentials etc. A particular
+#      runner implementation is free to raise exceptions in cases when platform configuration must present (which is
+#      always the case for, for instance, ssh runners).
+
+# Since a single platform file can define multiple platforms/runners, a reserved key 'default' defines the default
+# runner.
 default: local
 
+# Bellow, each key is associated with a particular configuration. Keys can be arbitrary and can define, for instance,
+# platform config for ssh runner for multiple nodes.
+
+# A simple mapping for a python runner. It maps a `python` key to a runner ID (`runner: python`). The mlbox package will
+# map runner ID to a specific implementation, like a reference one shipped with mlbox package.
 python:
   runner: python
 
+# In this particular example, I just use the `local` as a user identifier for a runner (docker) configuration.
 local:
   runner: docker
   build_args:
@@ -12,18 +28,10 @@ local:
     http_proxy: 'PROXY_SERVER_IF_NEEDED'
     https_proxy: 'PROXY_SERVER_IF_NEEDED'
 
-
-remote_local:
-  runner: docker
-  docker_runtime: docker
-  build_args:
-    http_proxy: 'PROXY_SERVER_IF_NEEDED'
-    https_proxy: 'PROXY_SERVER_IF_NEEDED'
-  run_args:
-    http_proxy: 'PROXY_SERVER_IF_NEEDED'
-    https_proxy: 'PROXY_SERVER_IF_NEEDED'
-
-
+# This is the configuration for a ssh runner. The mlbox recursively calls runners (for instance, ssh -> local or
+# ssh -> docker). So, we need to configure a runner on a remote host as well, which may different from the configuration
+# for the local node. So, in this particular example, a special key (`remote_local`) defines another runner
+# configuration that should be used on a remote host.
 remote:
   runner: ssh
   host: HOST
@@ -35,3 +43,18 @@ remote:
     remote_dir: /tmp/mlbox/examples/mnist
     sync: true
   remote_local: remote_local
+
+# This is a runner configuration that will be used by a mlbox ssh runner on a remote host (see `remote` configuration
+# section above). This is regular docker runner, and in theory, the `local` configuration can be used. But it can very
+# well be the case that the configuration for a remote host is different, so I use here different section.
+remote_local:
+  runner: docker
+  docker_runtime: docker
+  build_args:
+    http_proxy: 'PROXY_SERVER_IF_NEEDED'
+    https_proxy: 'PROXY_SERVER_IF_NEEDED'
+  run_args:
+    http_proxy: 'PROXY_SERVER_IF_NEEDED'
+    https_proxy: 'PROXY_SERVER_IF_NEEDED'
+
+
