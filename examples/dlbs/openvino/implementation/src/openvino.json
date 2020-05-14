@@ -1,0 +1,55 @@
+{
+  "parameters": {
+    "runtime.dlbs_cache": {
+      "val": "${HOME}/.dlbs",
+      "type": "str",
+      "desc": "DLBS host cache folder. Will need to be moved to base.json."
+    },
+    "openvino.launcher": {
+      "val": "${DLBS_ROOT}/scripts/launchers/openvino.sh",
+      "type": "str",
+      "desc": "Path to script that launches OpenVINO benchmarks."
+    },
+    "openvino.python_path": {
+      "val": "${DLBS_ROOT}/python/openvino_benchmarks",
+      "type": "str",
+      "desc": "Path to a OpenVINO benchmarks python folder. Depends on if bare metal/docker based benchmark is requested."
+    },
+    "openvino.env": {
+      "val": "",
+      "type": "str",
+      "desc": "Environmental variables to set for OpenVINO benchmarks."
+    },
+    "openvino.docker_image": {
+      "val": "dlbs/openvino:19.09",
+      "type": "str",
+      "desc": "The name of a docker image to use for OpenVINO if containerized benchmark is requested."
+    },
+    "openvino.downloader_args": {
+      "val": "--name $('${exp.model}'.split('/')[0])$ --output_dir ${runtime.dlbs_cache}/models --cache_dir ${runtime.dlbs_cache}/cache",
+      "type": "str",
+      "desc": "Parameters for a model downloader."
+    },
+    "openvino.data_dir": {
+      "val": "",
+      "type": "str",
+      "desc": "A data directory if real data should be used. If empty, synthetic data is used (no data ingestion pipeline)."
+    },
+    "openvino.api": {
+      "val": "async",
+      "val_domain": ["sync", "async"],
+      "type": "str",
+      "desc": "Enable Sync/Async API. Default value is 'async'."
+    },
+    "openvino.model_rel_path": {
+      "val": "$('${exp.model}/{}.xml'.format('${exp.model}'.split('/')[0]))$",
+      "type": "str",
+      "desc": "."
+    }
+  },
+  "extensions": [
+    {"condition": {"exp.framework": "openvino"}, "parameters": {"exp.framework_title": "OpenVINO",
+                                                                "runtime.python": "python3",
+                                                                "exp.gpus":  ""}}
+  ]
+}

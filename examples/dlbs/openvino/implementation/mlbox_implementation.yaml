@@ -1,0 +1,7 @@
+implementation_type: docker
+image: mlperf/dlbs-openvino
+docker_runtime: docker # OR docker
+configure: build # OR pull
+docker_args: []
+command: []
+args: []

@@ -1,0 +1,3 @@
+# If platform config/runner not specified on a command line, use reference python runner to run this MLBox on a
+# local machine using python environment.
+implementation_type: singularity

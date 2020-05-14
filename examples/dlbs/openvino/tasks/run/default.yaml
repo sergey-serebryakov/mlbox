@@ -1,0 +1,3 @@
+config: configs/config.json
+log_dir: logs
+dlbs_cache: dlbs_cache

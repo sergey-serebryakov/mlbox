@@ -1,0 +1,21 @@
+type: mlbox
+mlbox_spec_version: 0.1
+name: dlbs_openvino
+version: 0.1
+author: MLPerf Best Practices Working Group
+implementation: docker
+tasks:
+  validate:
+    inputs:
+      config: {description: "DLBS json configuration file"}
+    outputs: {}
+  run:
+    inputs:
+      config: {description: "DLBS json configuration file"}
+      dlbs_cache: {description: "DLBS cache directory"}
+    outputs:
+      log_dir: {description: "Directory for log files"}
+  report:
+    inputs:
+      log_dir: {description: "Directory for log files"}
+    outputs: {}

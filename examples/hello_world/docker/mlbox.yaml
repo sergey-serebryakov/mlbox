@@ -1,0 +1,23 @@
+type: mlbox
+mlbox_spec_version: 0.1
+name: hello_world
+version: 0.1
+author: MLPerf Best Practices Working Group
+implementation_type: docker
+
+# Two tasks - 'hello' and 'goodbye'
+tasks:
+  # The 'hello' task has one input (name) and one output (greeting)
+  hello:
+    inputs:
+      name: { description: The name to say hello to }
+    outputs:
+      greeting: { description: A friendly greeting }
+
+  # The 'goodbye' task has two inputs (name, greeting) and one output (farewell)
+  goodbye:
+    inputs:
+      name: { description: The name to say goodbye to }
+      greeting: { description: The greeting you received }
+    outputs:
+      farewell: { description: a farewell }

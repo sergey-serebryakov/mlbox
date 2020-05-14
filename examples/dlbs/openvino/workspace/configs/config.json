@@ -1,0 +1,38 @@
+{
+  "parameters": {
+    "exp.log_root_dir": "/dlbs_logs",
+    "exp.log_dir": "${exp.log_root_dir}/${openvino.api}",
+    "exp.log_file": "${exp.log_dir}/$('${exp.model}'.replace('/', '_').lower())$_batch${exp.replica_batch}.log",
+
+    "exp.docker": false,
+    "exp.framework": "openvino",
+    "exp.phase": "inference",
+
+    "exp.sys_info": "",
+    "exp.dlbs_hashtag": "",
+
+    "exp.rerun": "always",
+
+    "exp.model_title": "$('${exp.model}'.replace('/', ':').lower())$",
+
+    "runtime.launcher": ""
+  },
+  "variables": {
+    "exp.replica_batch": [1, 2, 4, 8],
+    "exp.model": ["mobilenetv2-int8-tf-0001/FP32", "resnet-50-int8-tf-0001/FP32", "inceptionv3-int8-tf-0001/FP32"]
+  },
+  "extensions": [
+    {
+      "condition": {"exp.model": "mobilenetv2-int8-tf-0001/FP32"},
+      "parameters": {"openvino.model_rel_path": "classification/mobilenetv2-dldt/INT8/FP32/mobilenetv2-int8-tf-0001.xml"}
+    },
+    {
+      "condition": {"exp.model": "resnet-50-int8-tf-0001/FP32"},
+      "parameters": {"openvino.model_rel_path": "classification/resnet50-dldt/INT8/FP32/resnet-50-int8-tf-0001.xml"}
+    },
+    {
+      "condition": {"exp.model": "inceptionv3-int8-tf-0001/FP32"},
+      "parameters": {"openvino.model_rel_path": "classification/inceptionv3-dldt/INT8/FP32/inceptionv3-int8-tf-0001/FP32.xml"}
+    }
+  ]
+}
