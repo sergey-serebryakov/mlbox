@@ -1,0 +1,5 @@
+# inputs:
+parameters_file: parameters/benchmark_parameters.yaml
+data_dir: data
+# outputs:
+log_dir: log

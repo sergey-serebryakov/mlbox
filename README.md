@@ -66,8 +66,15 @@ python -m mlbox run ./examples/mnist/singularity:train
 ## NGC TensorFlow
 ```shell script
 python -m mlbox describe ./examples/ngc/tensorflow
-python -m mlbox configure ./examples/ngc/tensorflow:train
-python -m mlbox run ./examples/ngc/tensorflow:train
+# Configure MLBox (build docker container)
+python -m mlbox configure ./examples/ngc/tensorflow
+# Run a small benchmark using all available GPU devices
+python -m mlbox run ./examples/ngc/tensorflow:benchmark/test
+# Run 500 iterations using synthetic data, mixed precision and all available GPU devices
+python -m mlbox run ./examples/ngc/tensorflow:benchmark/synthetic
+# Run 500 iterations using ImageNet data, mixed precision and all available GPU devices
+# ImageNet datasets (tfrecords) must be mounted to workspace/data
+python -m mlbox run ./examples/ngc/tensorflow:benchmark/imagenet
 ```
 
 ## DLBS - OpenVino: docker

@@ -1,4 +1,5 @@
-FROM nvcr.io/nvidia/tensorflow:18.07-py3
+# FROM nvcr.io/nvidia/tensorflow:18.07-py3
+FROM nvcr.io/nvidia/tensorflow:20.03-tf2-py3
 MAINTAINER MLPerf MLBox Working Group
 
 # Remove all stopped containers: docker rm $(docker ps -a -q)

@@ -5,10 +5,12 @@ version: 0.1
 author: MLPerf Best Practices Working Group
 implementation: docker
 tasks:
-  train:
+  benchmark:
     inputs:
       parameters_file:
         description: "Default values for the NGC TensorFlow benchmark implementation."
+      data_dir:
+        description: "Directory for ImageNet dataset."
     outputs:
       log_dir:
-        description: "Directory for MLPerf log files and model checkpoints."
+        description: "Directory for MLPerf log files and model checkpoints (if data_dir is present)."

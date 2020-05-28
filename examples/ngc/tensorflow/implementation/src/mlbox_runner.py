@@ -4,13 +4,14 @@ import os
 import argparse
 import logging
 import logging.config
-from typing import List
+from typing import List, Union
+import tensorflow as tf
 
 
 logger = logging.getLogger(__name__)
 
 
-def train(task_args: List[str], log_dir: str) -> None:
+def train(task_args: List[str], log_dir: str, data_dir: Union[None, str] = None) -> None:
     """ Task: train.
     Input parameters:
         --data_dir, --log_dir, --model_dir, --parameters_file
@@ -25,11 +26,16 @@ def train(task_args: List[str], log_dir: str) -> None:
     logger.info("Parameters have been read (%s).", args.parameters_file)
 
     #
-    cmd = "mpiexec --allow-run-as-root --bind-to socket -np 1 python ./{}.py --log_dir={} {}".format(
+    num_gpus = len(tf.config.experimental.list_physical_devices('GPU'))
+    if num_gpus == 0:
+        num_gpus = 1
+    cmd = "mpiexec --allow-run-as-root --bind-to socket -np {} python ./{}.py {}".format(
+        num_gpus,
         parameters.pop('model'),
-        log_dir,
         ' '.join(["--{}={}".format(param, value) for param, value in parameters.items()])
     )
+    if data_dir is not None:
+        cmd = "{} --log_dir={} --data_dir={}".format(cmd, log_dir, data_dir)
     print(cmd)
     logger.info("Command: %s", cmd)
 
@@ -44,8 +50,12 @@ def main():
     # noinspection PyBroadException
     try:
         parser = argparse.ArgumentParser()
-        parser.add_argument('--mlbox_task', '--mlbox-task', type=str, required=True, help="Task for this MLBOX.")
-        parser.add_argument('--log_dir', '--log-dir', type=str, required=True, help="Logging directory.")
+        parser.add_argument('--mlbox_task', '--mlbox-task', type=str, required=True,
+                            help="Task for this MLBOX.")
+        parser.add_argument('--log_dir', '--log-dir', type=str, required=True,
+                            help="Logging directory.")
+        parser.add_argument('--data_dir', '--data-dir', type=str, required=False, default=None,
+                            help="Dataset directory.")
         ml_box_args, task_args = parser.parse_known_args()
 
         logger_config = {
@@ -70,10 +80,10 @@ def main():
         }
         logging.config.dictConfig(logger_config)
 
-        if ml_box_args.mlbox_task == 'train':
+        if ml_box_args.mlbox_task == 'benchmark':
             train(task_args, log_dir=ml_box_args.log_dir)
         else:
-            raise ValueError("Unknown task: {}".format(task_args))
+            raise ValueError("Unknown task: {}".format(ml_box_args.mlbox_task ))
     except Exception as err:
         logger.exception(err)
 

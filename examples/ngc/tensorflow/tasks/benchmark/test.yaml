@@ -1,0 +1,5 @@
+# inputs:
+parameters_file: parameters/test.yaml
+data_dir:
+# outputs:
+log_dir: log
