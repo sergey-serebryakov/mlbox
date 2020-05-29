@@ -1,6 +1,8 @@
 implementation_type: docker
-docker_runtime: nvidia-docker # OR docker
-docker_args: []
+docker_runtime: nvidia-docker # OR docker - that's probably does not matter any more.
 image: mlperf/ngc-tensorflow-example
+
+# Do not use these parameters
+docker_args: []
 command: []
 args: []

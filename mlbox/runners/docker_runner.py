@@ -65,15 +65,16 @@ class DockerRunner(MLBoxRunner):
                 specific platform described by `platform_config`.
         TODO: Should output be redirected to somewhere instead of just writing to standard output?
         """
-        mount_points = self.mlbox.implementation.task['mount_points']
-        run_args = self.mlbox.implementation.task.get('run_args', {})
-        mlbox_args = self.mlbox.implementation.task['mlbox_args']
+        mount_points = self.mlbox.implementation.task['mount_points']  # Mount points for docker
+        input_params = self.mlbox.implementation.task['input_params']  # Parameters for MLBox workload
 
+        docker_args = self.platform_config.get('docker_args', "")
         for proxy_var in ('http_proxy', 'https_proxy'):
-            if proxy_var not in run_args and os.environ.get(proxy_var, None) is not None:
-                run_args[proxy_var] = os.environ[proxy_var]
+            # if proxy_var not in run_args and os.environ.get(proxy_var, None) is not None:
+            if os.environ.get(proxy_var, None) is not None:
+                docker_args = "{} -e {}={}".format(docker_args, proxy_var, os.environ[proxy_var])
                 logger.warning("Setting docker build arg from env variable: {} = {}".format(proxy_var,
-                                                                                            run_args[proxy_var]))
+                                                                                            os.environ[proxy_var]))
         docker = DockerAPI(self.mlbox, self.platform_config)
         runtime = docker.get_runtime()
         if runtime != self.mlbox.implementation.docker_runtime:
@@ -81,10 +82,9 @@ class DockerRunner(MLBoxRunner):
                            "Will use it.", self.mlbox.implementation.docker_runtime, runtime)
 
         volumes_str = ' '.join(['-v {}:{}'.format(t[0], t[1]) for t in mount_points.items()])
-        docker_args_str = ' '.join(['-e {}={}'.format(t[0], t[1]) for t in run_args.items()])
-        args_str = ' '.join(sorted(['--{}={}'.format(k, v) for k, v in mlbox_args.items()]))
+        args_str = ' '.join(sorted(['--{}={}'.format(k, v) for k, v in input_params.items()]))
         cmd = '{} run {} {} --rm --net=host --privileged=true -t {} {}'.format(
-            runtime, volumes_str, docker_args_str, self.mlbox.implementation.image, args_str
+            runtime, volumes_str, docker_args, self.mlbox.implementation.image, args_str
         )
         Utils.run_or_die(cmd)
         return 0

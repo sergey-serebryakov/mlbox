@@ -11,5 +11,8 @@ RUN pip install --no-cache-dir -r /requirements.txt
 
 COPY implementation/src/mlbox_runner.py /workspace/nvidia-examples/cnn/mlbox_runner.py
 
+# Add time stamp to the output
+RUN sed -i '52s/.*/        print("time_stamp: %f, global_step: %d images_per_sec: %.1f" % (timestamp, self.global_steps,/' /workspace/nvidia-examples/cnn/nvutils/runner.py
+
 WORKDIR /workspace/nvidia-examples/cnn
 ENTRYPOINT ["python", "mlbox_runner.py"]

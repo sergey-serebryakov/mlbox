@@ -105,8 +105,8 @@ class DockerImplementation(object):
         self.command = cfg['command']
         self.args = cfg['args']
         self.configure = cfg.get('configure', 'build')
-
-        self.task = None
+        # Dictionary of task specific parameters that are assigned in __main__.py. This dict will be overwritten.
+        self.task: dict = {}
 
     def __str__(self) -> str:
         return "DockerImplementation(dockerfile_path={}, image={}, docker_runtime={})".format(

@@ -1,0 +1,11 @@
+# Default arguments in docker runner: --rm --net=host --privileged=true -t
+# Proxy servers: either list here (-e http_proxy=...) or set environmental variable (export http_proxy=...).
+
+nvidia:
+  docker_args: "--ipc=host --ulimit stack=67108864 --ulimit memlock=-1 --security-opt seccomp=unconfined"
+
+test_config:
+  docker_args: "-e CUDA_VISIBLE_DEVICES=0"
+
+limited_memory_config:
+  docker_args: "--memory=64G"

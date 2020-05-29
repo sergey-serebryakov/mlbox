@@ -1,5 +1,6 @@
 import logging
 import sys
+from datetime import datetime
 from mlbox.parser import MLBoxParser
 from mlbox.runners import RunnersFactory
 from mlbox.util import Utils
@@ -83,7 +84,7 @@ def main():
         runner.configure()
         return
 
-    # TODO: refactor me!
+    # TODO: refactor me! The usage of task is super confusing. Difference between input_params/mlbox_args?
     if mlbox.implementation_type == 'python':
         args = Utils.get_args_with_defaults(mlbox, io, task_name, input_group)
         mlbox.implementation.task = {'name': task_name, 'input_group': input_group, 'input_params': args}
@@ -98,13 +99,15 @@ def main():
         logger.info("Host to container file path mappings: %s", str(path_map))
         logger.info("Internal args %s", str(internal_args))
 
-        mlbox.implementation.task = {'name': task_name, 'input_group': input_group,
-                                     'mount_points': dir_map, 'run_args': {}, 'mlbox_args': internal_args}
+        mlbox.implementation.task = {'name': task_name, 'input_group': input_group, 'input_params': internal_args,
+                                     'mount_points': dir_map}
 
     # Run commands.
     if command == 'run':
         runner = RunnersFactory.create(mlbox, platform_config)
+        logger.info("MLBox started at {}".format(str(datetime.now())))
         runner.execute(cmd=None)
+        logger.info("MLBox finished at {}".format(str(datetime.now())))
     else:
         raise ValueError("Invalid command: {}".format(command))
 

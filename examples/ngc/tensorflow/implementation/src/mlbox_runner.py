@@ -25,12 +25,13 @@ def train(task_args: List[str], log_dir: str, data_dir: Union[None, str] = None)
         parameters = yaml.load(stream, Loader=yaml.FullLoader)
     logger.info("Parameters have been read (%s).", args.parameters_file)
 
-    #
-    num_gpus = len(tf.config.experimental.list_physical_devices('GPU'))
-    if num_gpus == 0:
-        num_gpus = 1
-    cmd = "mpiexec --allow-run-as-root --bind-to socket -np {} python ./{}.py {}".format(
-        num_gpus,
+    # Grab all GPUs
+    num_workers = len(tf.config.experimental.list_physical_devices('GPU'))
+    if num_workers == 0:
+        num_workers = 1
+    # TODO: https://github.com/mlperf/training_results_v0.6/blob/master/NVIDIA/benchmarks/resnet/implementations/mxnet/ompi_bind_DGX1.sh
+    cmd = "mpiexec --allow-run-as-root --bind-to none -np {} python ./{}.py {}".format(
+        num_workers,
         parameters.pop('model'),
         ' '.join(["--{}={}".format(param, value) for param, value in parameters.items()])
     )
@@ -69,7 +70,7 @@ def main():
                     "class": "logging.FileHandler",
                     "level": "INFO",
                     "formatter": "standard",
-                    "filename": os.path.join(ml_box_args.log_dir, "mlbox_mnist_{}.log".format(ml_box_args.mlbox_task))
+                    "filename": os.path.join(ml_box_args.log_dir, "mlbox_ngc_tf_{}.log".format(ml_box_args.mlbox_task))
                 }
             },
             "loggers": {
