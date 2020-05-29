@@ -81,9 +81,9 @@ def main():
         logging.config.dictConfig(logger_config)
 
         if ml_box_args.mlbox_task == 'benchmark':
-            train(task_args, log_dir=ml_box_args.log_dir)
+            train(task_args, log_dir=ml_box_args.log_dir, data_dir=ml_box_args.data_dir)
         else:
-            raise ValueError("Unknown task: {}".format(ml_box_args.mlbox_task ))
+            raise ValueError("Unknown task: {}".format(ml_box_args.mlbox_task))
     except Exception as err:
         logger.exception(err)
 

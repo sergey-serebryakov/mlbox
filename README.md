@@ -73,7 +73,7 @@ python -m mlbox run ./examples/ngc/tensorflow:benchmark/test
 # Run 500 iterations using synthetic data, mixed precision and all available GPU devices
 python -m mlbox run ./examples/ngc/tensorflow:benchmark/synthetic
 # Run 500 iterations using ImageNet data, mixed precision and all available GPU devices
-# ImageNet datasets (tfrecords) must be mounted to workspace/data
+# ImageNet datasets (tfrecords) must be in workspace/data (or update the data_dir parameter)
 python -m mlbox run ./examples/ngc/tensorflow:benchmark/imagenet
 ```
 
