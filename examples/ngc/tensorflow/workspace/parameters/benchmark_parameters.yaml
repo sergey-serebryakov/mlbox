@@ -1,5 +1,5 @@
 model: resnet
 precision: fp16
 batch_size: 256
-num_iter: 500
+num_iter: 100
 iter_unit: batch

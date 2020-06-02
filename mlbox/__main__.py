@@ -85,7 +85,7 @@ def main():
         return
 
     # TODO: refactor me! The usage of task is super confusing. Difference between input_params/mlbox_args?
-    if mlbox.implementation_type == 'python':
+    if mlbox.implementation_type in ('python', 'exec'):
         args = Utils.get_args_with_defaults(mlbox, io, task_name, input_group)
         mlbox.implementation.task = {'name': task_name, 'input_group': input_group, 'input_params': args}
     elif mlbox.implementation_type in ('docker', 'singularity'):

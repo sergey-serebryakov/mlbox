@@ -1,0 +1,12 @@
+implementation_type: exec
+
+directories:
+  - "implementation/src"
+  - "workspace/log"
+
+configure:
+  - "cd implementation/src && if [ ! -d '.git' ]; then git clone --single-branch --branch upstream-nvidia-maskrcnn-pytorch https://github.com/sergey-serebryakov/mlperf-training-v0.6.git .; fi;"
+  - "cd implementation/src && docker build --pull -t  mlperf-nvidia:object_detection ."
+
+run:
+  - "cd implementation/src && export DATADIR=$data_dir LOGDIR=$log_dir DGXSYSTEM=$DGXSYSTEM NEXP=$NEXP NUMEPOCHS=$NUMEPOCHS PULL=$PULL && ./run.sub"

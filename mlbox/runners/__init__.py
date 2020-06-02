@@ -19,6 +19,9 @@ class RunnersFactory(object):
         elif runner_type == 'ssh':
             from mlbox.runners.ssh_runner import SSHRunner
             runner = SSHRunner(mlbox, platform_config)
+        elif runner_type == 'exec':
+            from mlbox.runners.exec_runner import ExecRunner
+            runner = ExecRunner(mlbox, platform_config)
 
         if runner is None:
             raise ValueError("Invalid runner: {}".format(runner_type))

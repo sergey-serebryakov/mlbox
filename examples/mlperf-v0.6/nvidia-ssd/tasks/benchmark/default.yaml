@@ -1,0 +1,3 @@
+parameters_file: parameters/default_parameters.yaml
+data_dir: /lustre/nvme/mlperf_datasets/coco
+log_dir: log

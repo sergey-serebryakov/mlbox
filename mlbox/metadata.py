@@ -1,6 +1,7 @@
 import sys
 import os
 from typing import Union
+from copy import deepcopy
 
 
 class MLBox:
@@ -150,3 +151,17 @@ class PythonImplementation(object):
         return "PythonImplementation(interpreter={}, config={}, force_reconfigure={}, requirements={}, "\
                "entrypoint={})".format(self.interpreter, self.interpreter_config, self.force_reconfigure,
                                        self.requirements, self.entrypoint)
+
+
+class ExecImplementation(object):
+
+    TYPE = 'exec'
+
+    def __init__(self, cfg: dict):
+        self.directories = deepcopy(cfg.get('directories', []))
+        self.configure = deepcopy(cfg.get('configure', []))
+        self.run = deepcopy(cfg.get('run', []))
+
+    def __str__(self) -> str:
+        return "ExecImplementation(directories={}, configure={}, run={})".format(self.directories,
+                                                                                 self.configure, self.run)

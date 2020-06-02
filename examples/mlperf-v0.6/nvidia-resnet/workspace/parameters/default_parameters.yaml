@@ -1,0 +1,6 @@
+# Number of experiments to run, set it to 1
+NEXP: 1
+
+# A system to use
+#   `DGX1`: 2-CPU 8-way GPU server with 20 cores per CPU, HT enabled (total cores per CPU = 40).
+DGXSYSTEM: DGX1

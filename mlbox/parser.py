@@ -4,7 +4,7 @@ import glob
 from typing import Union
 from mlbox.util import Utils
 from mlbox.metadata import MLBox, DockerImplementation, SingularityImplementation, PythonImplementation, \
-    MLTask, MLTaskInput, MLTaskOutput, MLTaskDefaults
+    ExecImplementation, MLTask, MLTaskInput, MLTaskOutput, MLTaskDefaults
 
 
 class MLBoxParser(object):
@@ -69,6 +69,15 @@ class MLBoxParser(object):
         return mlbox
 
     @staticmethod
+    def create_exec_metadata(mlbox: MLBox, impl: dict) -> MLBox:
+        """ Wrap the 'impl' dictionary with ExecImplementation instance.
+        The 'impl' is a dictionary loaded from mlbox_implementation.yaml file, that's specific to each runner.
+        """
+        mlbox.implementation = ExecImplementation(impl)
+        mlbox.implementation_type = mlbox.implementation.TYPE
+        return mlbox
+
+    @staticmethod
     def create_metadata(box_dir: str) -> MLBox:
         """ Return MLBox meta data.
         Args:
@@ -105,6 +114,8 @@ class MLBoxParser(object):
             mlbox = MLBoxParser.create_python_metadata(mlbox, impl)
         elif impl['implementation_type'] == 'singularity':
             mlbox = MLBoxParser.create_singularity_metadata(mlbox, impl)
+        elif impl['implementation_type'] == 'exec':
+            mlbox = MLBoxParser.create_exec_metadata(mlbox, impl)
         else:
             raise ValueError('Unsupported MLBox implementation ({}).'.format(impl['implementation_type']))
 
