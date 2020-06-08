@@ -144,8 +144,11 @@ class Utils(object):
     @staticmethod
     def get_args_with_defaults(mlbox, overrides, task_name, defaults=None) -> dict:
         """Returns an argument map, {'arg_name': '/path/to/file'}"""
+        task = mlbox.tasks[task_name]
+        if defaults not in task.defaults:
+            raise Exception('No such defaults for: {}'.format(defaults))
+
         args = {}
-        task: dict = mlbox.tasks[task_name]
         task_args: list = list(task.inputs.keys()) + list(task.outputs.keys())
 
         # print("Defaults: ", defaults)  # A string
@@ -155,23 +158,20 @@ class Utils(object):
         # print("Overrides: ", overrides)  # Almost always empty
 
         # The 'task_args' is the list of input/output parameter names for this task.
-        # The 'overrides' the dict (?) of parameters that use has overridden on a command line (?)
+        # The 'overrides' the dict of parameters that use has overridden on a command line
         # The 'defaults' is the parameter set for the current task
         for task_arg in task_args:
-            if task_arg in overrides:
-                args[task_arg] = overrides[task_arg]
-            elif defaults not in task.defaults:
-                print('Checked task: {}'.format(task.name))
-                raise Exception('No such defaults for: {}'.format(defaults))
-            elif task_arg not in task.defaults[defaults].default_paths:
+            if task_arg not in task.defaults[defaults].default_paths:
                 raise Exception('Defaults for {} does not include {}.'.format(defaults, task_arg))
+            # TODO: This is probably not the greatest idea, but I need to be able to work with unset parameters
+            param_value = task.defaults[defaults].default_paths[task_arg]
+            if task_arg in overrides:
+                param_value = overrides[task_arg]
+
+            if param_value is not None:
+                args[task_arg] = os.path.join(mlbox.workspace_dir, param_value)
             else:
-                # TODO: This is probably not the greatest idea, but I need to be able to work with unset parameters
-                param_value = task.defaults[defaults].default_paths[task_arg]
-                if param_value is not None:
-                    args[task_arg] = os.path.join(mlbox.workspace_dir, param_value)
-                else:
-                    print("[WARNING] Skipping '{}' argument for {}:{} (not set).".format(task_arg, task_name, defaults))
+                print("[WARNING] Skipping '{}' argument for {}:{} (not set).".format(task_arg, task_name, defaults))
         return args
 
     @staticmethod

@@ -1,5 +1,6 @@
 import logging
 import sys
+import argparse
 from datetime import datetime
 from mlbox.parser import MLBoxParser
 from mlbox.runners import RunnersFactory
@@ -39,14 +40,20 @@ def main():
       $ python -m mlbox run ./examples/hello_world/singularity:hello/xinyuan
       $ python -m mlbox run ./examples/hello_world/singularity:goodbye/xinyuan
     """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('mlbox_args', nargs='*', help="")
+    mlbox_args, user_args = parser.parse_known_args()
+    mlbox_args = mlbox_args.mlbox_args
+
     # Parse command line arguments, see if mlbox needs to print help message
-    if len(sys.argv) >= 2 and sys.argv[1] == 'help':
+    if len(mlbox_args) == 1 and mlbox_args[0] == 'help':
         Help.help(sys.argv[2:])
         return
-    elif len(sys.argv) == 3:
-        command, platform, mlbox = sys.argv[1], None, sys.argv[2]
-    elif len(sys.argv) == 4:
-        command, platform, mlbox = sys.argv[1], sys.argv[2], sys.argv[3]
+    elif len(mlbox_args) == 2:
+        command, mlbox = mlbox_args
+        platform = None
+    elif len(mlbox_args) == 3:
+        command, platform, mlbox = mlbox_args
     else:
         Help.generic_help_message()
         return
@@ -58,7 +65,7 @@ def main():
     logger.info("mlbox: %s, command: %s, platform: %s", mlbox, command, platform)
 
     # Split command line arguments into parts - no configuration files required
-    mlbox_dir, task_name, input_group, io = Utils.get_commandline_args(mlbox=mlbox, user_args=[])
+    mlbox_dir, task_name, input_group, io = Utils.get_commandline_args(mlbox=mlbox, user_args=user_args)
     logger.info("mlbox_dir=%s, task_name=%s, input_group=%s, io=%s", mlbox_dir, task_name, input_group, str(io))
 
     # Retrieve MLBox metadata - this reads MLBox config files and supports docker implementations.

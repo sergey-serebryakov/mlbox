@@ -13,7 +13,13 @@ nvidia_2:
 nvidia_4:
   docker_args: "--ipc=host --ulimit stack=67108864 --ulimit memlock=-1 --security-opt seccomp=unconfined -e CUDA_VISIBLE_DEVICES=0,1,2,3"
 
-nvidia_8:
+nvidia_8_0_224g:
+  docker_args: "--memory=224G --ipc=host --ulimit stack=67108864 --ulimit memlock=-1 --security-opt seccomp=unconfined -e CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7"
+
+nvidia_8_0_256g:
+  docker_args: "--memory=256G --ipc=host --ulimit stack=67108864 --ulimit memlock=-1 --security-opt seccomp=unconfined -e CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7"
+
+nvidia_8_0_all:
   docker_args: "--ipc=host --ulimit stack=67108864 --ulimit memlock=-1 --security-opt seccomp=unconfined -e CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7"
 
 test_config:

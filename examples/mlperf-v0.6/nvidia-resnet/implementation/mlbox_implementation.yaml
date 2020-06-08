@@ -9,4 +9,4 @@ configure:
   - "cd implementation/src && docker build --pull -t  mlperf-nvidia:image_classification ."
 
 run:
-  - "cd implementation/src && export DATADIR=$data_dir LOGDIR=$log_dir DGXSYSTEM=$DGXSYSTEM NEXP=$NEXP && ./run.sub"
+  - "cd implementation/src && export DATADIR=$data_dir LOGDIR=$log_dir DGXSYSTEM=$DGXSYSTEM NEXP=$NEXP NUMEPOCHS=$NUMEPOCHS && ./run.sub"
