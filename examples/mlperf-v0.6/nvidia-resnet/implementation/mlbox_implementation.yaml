@@ -8,5 +8,6 @@ configure:
   - "cd implementation/src && if [ ! -d '.git' ]; then git clone https://github.com/sergey-serebryakov/mlperf-training-v0.6.git .; fi;"
   - "cd implementation/src && docker build --pull -t  mlperf-nvidia:image_classification ."
 
+# NUMEPOCHS and DGXSYSTEM should become env variables and need to be in VAR array
 run:
-  - "cd implementation/src && export DATADIR=$data_dir LOGDIR=$log_dir DGXSYSTEM=$DGXSYSTEM NEXP=$NEXP NUMEPOCHS=$NUMEPOCHS && ./run.sub"
+  - "cd implementation/src && export DATADIR=$data_dir LOGDIR=$log_dir DGXSYSTEM=$DGXSYSTEM NEXP=$NEXP NUMEPOCHS=$NUMEPOCHS DOCKER_MEMORY=$DOCKER_MEMORY && ./run.sub"

@@ -25,15 +25,16 @@ nvidia_8. No process pinning is used.
 python3 -m mlbox configure ./examples/ngc/tensorflow
 
 # One 8-GPU training session, no memory limits.
-mkdir ./examples/ngc/tensorflow/workspace/log_lustre_nvme_nvidia_8_0_all
-python3 -m mlbox run ./examples/ngc/docker.platforms.yaml:nvidia_8_0_all ./examples/ngc/tensorflow:benchmark/imagenet --log_dir=log_lustre_nvme_nvidia_8_0_all >> ./examples/ngc/tensorflow/workspace/log_lustre_nvme_nvidia_8_0_all/mlbox.log 2>&1
+export drives=nvme
+mkdir ./examples/ngc/tensorflow/workspace/log_lustre_${drives}_nvidia_8_0_all
+python3 -m mlbox run ./examples/ngc/docker.platforms.yaml:nvidia_8_0_all ./examples/ngc/tensorflow:benchmark/imagenet --log_dir=log_lustre_${drives}_nvidia_8_0_all >> ./examples/ngc/tensorflow/workspace/log_lustre_${drives}_nvidia_8_0_all/mlbox.log 2>&1
 
 # One 8-GPU training session, max container memory 224G memory.
-mkdir ./examples/ngc/tensorflow/workspace/log_lustre_nvme_nvidia_8_0_224g
-python3 -m mlbox run ./examples/ngc/docker.platforms.yaml:nvidia_8_0_224g ./examples/ngc/tensorflow:benchmark/imagenet --log_dir=log_lustre_nvme_nvidia_8_0_224g >> ./examples/ngc/tensorflow/workspace/log_lustre_nvme_nvidia_8_0_224g/mlbox.log 2>&1 
+mkdir ./examples/ngc/tensorflow/workspace/log_lustre_${drives}_nvidia_8_0_224g
+python3 -m mlbox run ./examples/ngc/docker.platforms.yaml:nvidia_8_0_224g ./examples/ngc/tensorflow:benchmark/imagenet --log_dir=log_lustre_${drives}_nvidia_8_0_224g >> ./examples/ngc/tensorflow/workspace/log_lustre_${drives}_nvidia_8_0_224g/mlbox.log 2>&1 
 
 # One 8-GPU training session, max container memory 256G memory.
-mkdir ./examples/ngc/tensorflow/workspace/log_lustre_nvme_nvidia_8_0_256g
-python3 -m mlbox run ./examples/ngc/docker.platforms.yaml:nvidia_8_0_256g ./examples/ngc/tensorflow:benchmark/imagenet --log_dir=log_lustre_nvme_nvidia_8_0_256g >> ./examples/ngc/tensorflow/workspace/log_lustre_nvme_nvidia_8_0_256g/mlbox.log 2>&1
+mkdir ./examples/ngc/tensorflow/workspace/log_lustre_${drives}_nvidia_8_0_256g
+python3 -m mlbox run ./examples/ngc/docker.platforms.yaml:nvidia_8_0_256g ./examples/ngc/tensorflow:benchmark/imagenet --log_dir=log_lustre_${drives}_nvidia_8_0_256g >> ./examples/ngc/tensorflow/workspace/log_lustre_${drives}_nvidia_8_0_256g/mlbox.log 2>&1
 ```
 

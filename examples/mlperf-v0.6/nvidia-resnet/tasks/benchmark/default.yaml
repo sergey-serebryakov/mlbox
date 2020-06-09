@@ -1,4 +1,3 @@
-parameters_file: parameters/default_parameters.yaml
-data_dir: /lustre/nvme/datasets/imagenet_mxnet/
-# data_dir: /ml/datasets/ILSVRC_DATA/RECORDIO/
+parameters_file: parameters/unlim_memory.yaml
+data_dir:
 log_dir: log
