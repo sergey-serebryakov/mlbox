@@ -9,4 +9,4 @@ configure:
   - "cd implementation/src && docker build --pull -t  mlperf-nvidia:single_stage_detector ."
 
 run:
-  - "cd implementation/src && export DATADIR=$data_dir LOGDIR=$log_dir DGXSYSTEM=$DGXSYSTEM NEXP=$NEXP NUMEPOCHS=$NUMEPOCHS PULL=$PULL && ./run.sub"
+  - "cd implementation/src && export DATADIR=$data_dir LOGDIR=$log_dir DGXSYSTEM=$DGXSYSTEM NEXP=$NEXP NUMEPOCHS=$NUMEPOCHS PULL=$PULL DOCKER_MEMORY=$DOCKER_MEMORY && ./run.sub"

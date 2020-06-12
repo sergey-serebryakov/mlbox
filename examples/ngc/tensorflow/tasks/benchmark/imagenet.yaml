@@ -1,8 +1,4 @@
 # inputs:
 parameters_file: parameters/benchmark_parameters.yaml
-# data_dir: /lustre/hdd/datasets/imagenet_tensorflow/
-# data_dir: /lustre/ssd/datasets/imagenet_tensorflow/
-data_dir: /lustre/nvme/datasets/imagenet_tensorflow/
-# data_dir: /ml/datasets/ILSVRC_DATA/TFRECORD/imagenet-dataset/
-# outputs:
+data_dir:
 log_dir: log

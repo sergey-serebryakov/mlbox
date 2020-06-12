@@ -1,0 +1,14 @@
+# Number of experiments to run, set it to 1
+NEXP: 1
+
+# A system to use
+#   `DGX1`: 2-CPU 8-way GPU server with 20 cores per CPU, HT enabled (total cores per CPU = 40).
+DGXSYSTEM: DGX1
+
+# A docker arg for limiting memory available inside container
+DOCKER_MEMORY: "--memory=128G"
+
+# Number of epochs
+NUMEPOCHS: 10
+
+PULL: 0
