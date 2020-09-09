@@ -490,7 +490,7 @@ cd ./mlbox
 <div class="highlight"><pre><span></span><code>virtualenv -p python3.8 ./env
 source ./env/bin/activate
 pip install typer mlspeclib
-export PYTHONPATH=$(pwd)/mlcommons_box:$(pwd)/runners/mlbox_singularity_run:$(pwd)/runners/mlbox_docker_run
+export PYTHONPATH=$(pwd)/mlcommons_box:$(pwd)/runners/mlbox_singularity_run:$(pwd)/runners/mlbox_docker_run:$(pwd)/runners/mlbox_ssh_run
 </code></pre></div></p>
 <p>Optionally, setup host environment by providing the correct <code>http_proxy</code> and <code>https_proxy</code> environmental variables.
 <div class="highlight"><pre><span></span><code>export http_proxy=...
@@ -501,14 +501,14 @@ export https_proxy=...
 command providing path to a MLBox root directory and path to a platform configuration file. Hello World MLBox is a 
 docker-based MLBox, so users provide path to a Docker platform configuration file that sets a number of parameters,
 including docker image name:
-<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run configure --mlbox=examples/hello_world --platform=examples/hello_world/platform/docker.yaml
+<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run configure --mlbox=examples/hello_world --platform=examples/hello_world/platforms/docker.yaml
 </code></pre></div>
 Docker runner will build a docker image for the Hello World MLBox.</p>
 <h2 id="running-mlbox">Running MLBox<a class="headerlink" href="#running-mlbox" title="Permanent link">&para;</a></h2>
 <p>In order to run MLBox, users need to provide the path to the root directory of the MLBox, platform configuration file
 and path to a task definition file. Run the following two commands one at a time:
-<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platform/docker.yaml --task=examples/hello_world/run/alice/hello.yaml
-python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platform/docker.yaml --task=examples/hello_world/run/alice/bye.yaml
+<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platforms/docker.yaml --task=examples/hello_world/run/alice/hello.yaml
+python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platforms/docker.yaml --task=examples/hello_world/run/alice/bye.yaml
 </code></pre></div>
 MLBox creates a file <code>examples/hello_world/workspace/chats/chat_with_alice.txt</code> that contains the following:
 <div class="highlight"><pre><span></span><code>[2020-09-03 09:13:14.236945]  Hi, Alice! Nice to meet you.
@@ -542,8 +542,8 @@ MLBox creates a file <code>examples/hello_world/workspace/chats/chat_with_alice.
         <span class="nt">chat</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$WORKSPACE/chats/chat_with_donald.txt</span>
 </code></pre></div></p>
 <p>Run the following two commands one at a time:
-<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platform/docker.yaml --task=examples/hello_world/run/donald/hello.yaml
-python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platform/docker.yaml --task=examples/hello_world/run/donald/bye.yaml
+<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platforms/docker.yaml --task=examples/hello_world/run/donald/hello.yaml
+python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platforms/docker.yaml --task=examples/hello_world/run/donald/bye.yaml
 </code></pre></div>
 MLBox creates a file <code>examples/hello_world/workspace/chats/chat_with_donald.txt</code> that contains the following:
 <div class="highlight"><pre><span></span><code>[2020-09-03 09:23:09.569558]  Hi, Donald! Nice to meet you.
@@ -559,10 +559,10 @@ MLBox will respond: <code>Nice to see you again.</code>.</p>
     <span class="k">return</span> <span class="s2">&quot;Nice to meet you.&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">chat_file</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;Nice to see you again.&quot;</span>
 </code></pre></div></p>
 <p>Since we updated a file in <code>build</code> subdirectory, we need to re-configure the MLBox:
-<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run configure --mlbox=examples/hello_world --platform=examples/hello_world/platform/docker.yaml
+<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run configure --mlbox=examples/hello_world --platform=examples/hello_world/platforms/docker.yaml
 </code></pre></div>
 Now, run two <code>hello</code> task again:
-<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platform/docker.yaml --task=examples/hello_world/run/alice/hello.yaml
+<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run run --mlbox=examples/hello_world --platform=examples/hello_world/platforms/docker.yaml --task=examples/hello_world/run/alice/hello.yaml
 </code></pre></div>
 The MLBox recognized it was not the first time it talked to Alice, and changed the greeting:
 <div class="highlight"><pre><span></span><code>[2020-09-03 09:13:14.236945]  Hi, Alice! Nice to meet you.
