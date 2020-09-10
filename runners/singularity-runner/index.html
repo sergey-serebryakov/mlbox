@@ -402,42 +402,42 @@
                 
                 
                 <h1 id="singularity-runner">Singularity Runner<a class="headerlink" href="#singularity-runner" title="Permanent link">&para;</a></h1>
-<p>Singularity runner uses singularity to run MLBoxes. It supports two mandatory commands - <code>configure</code> and <code>run</code> with
-standard arguments - <code>mlbox</code>, <code>platform</code> and <code>task</code>. Singularity platform configuration is used to configure Singularity
-runner.</p>
+<p>Singularity runner uses singularity to run MLCommon-Box boxes. It supports two mandatory commands - <code>configure</code> and
+<code>run</code> with standard arguments - <code>mlbox</code>, <code>platform</code> and <code>task</code>. Singularity platform configuration is used to configure
+Singularity runner.</p>
 <h2 id="platform-configuration-file">Platform Configuration File<a class="headerlink" href="#platform-configuration-file" title="Permanent link">&para;</a></h2>
 <p>Singularity platform configuration file is a YAML file that follows <code>mlbox_singularity</code> ML schema. The configuration
-file for the reference MNIST MLBox is the following:
+file for the reference MNIST box is the following:
 <div class="highlight"><pre><span></span><code><span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
 <span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlbox_singularity</span>
 
 <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/singularity/mlperf_mlbox_mnist-0.01.simg</span>   <span class="c1"># Path to or name of a Singularity image.</span>
 </code></pre></div></p>
-<p>The <code>image</code> field above is a path to a singularity container. It is relative to <code>{MLBOX_ROOT}/workspace</code>:
-- By default, containers are stored in <code>{MLBOX_ROOT}/workspace</code> if image is a file name.
-- If it is a relative path, it is relative to <code>{MLBOX_ROOT}/workspace</code>.
+<p>The <code>image</code> field above is a path to a singularity container. It is relative to <code>{MLCOMMONS_BOX_ROOT}/workspace</code>:
+- By default, containers are stored in <code>{MLCOMMONS_BOX_ROOT}/workspace</code> if image is a file name.
+- If it is a relative path, it is relative to <code>{MLCOMMONS_BOX_ROOT}/workspace</code>.
 - Absolute paths (starting with /) are used as is.</p>
-<p>In the example above, Singularity image is stored in the directory outside of the <code>{MLBOX_ROOT}</code> to avoid copying it
-back to the user host when using runners such as SSH.</p>
+<p>In the example above, Singularity image is stored in the directory outside of the <code>{MLCOMMONS_BOX_ROOT}</code> to avoid
+copying it back to a user host when using runners such as SSH.</p>
 <h2 id="build-command">Build command<a class="headerlink" href="#build-command" title="Permanent link">&para;</a></h2>
-<p>Singularity runner uses <code>{MLBOX_ROOT}/build</code> directory as the build context directory. This implies that all files that
-must be packaged in a singularity image, must be located in that directory, including source files, python requirements,
-resource files, ML models etc. The singularity recipe must have the standard name <code>Singularity.recipe</code>.</p>
+<p>Singularity runner uses <code>{MLCOMMONS_BOX_ROOT}/build</code> directory as the build context directory. This implies that all
+files that must be packaged in a singularity image, must be located in that directory, including source files, python
+requirements, resource files, ML models etc. The singularity recipe must have the standard name <code>Singularity.recipe</code>.</p>
 <p>Singularity runner under the hood runs the following command line:<br />
 <div class="highlight"><pre><span></span><code>cd {build_path}; singularity build --fakeroot {image_path} Singularity.recipe
 </code></pre></div>
 where:<br />
-- <code>{build_path}</code> is <code>{MLBOX_ROOT}/build</code> root directory.<br />
+- <code>{build_path}</code> is <code>{MLCOMMONS_BOX_ROOT}/build</code> root directory.<br />
 - <code>{image_path}</code> is the path to Singularity image that is computed as described above. </p>
 <h2 id="run-command">Run command<a class="headerlink" href="#run-command" title="Permanent link">&para;</a></h2>
 <p>Singularity runner runs the following command:  <br />
 <div class="highlight"><pre><span></span><code>singularity run {volumes} {image_path} {args}
 </code></pre></div>
 where:  <br />
-- <code>{volumes}</code> are the mount points that MLBox library automatically constructed based upon task input/output
+- <code>{volumes}</code> are the mount points that the runner automatically constructs based upon the task input/output
   specifications.<br />
 - <code>{image_path}</code> is the path to Singularity image that is computed as described above.<br />
-- <code>{args}</code> is the task command line arguments, constructed automatically by the MLBox library.  </p>
+- <code>{args}</code> is the task command line arguments, constructed automatically by the runner.  </p>
                 
               
               

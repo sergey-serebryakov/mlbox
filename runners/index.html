@@ -273,8 +273,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#reference-mlbox-runners" class="md-nav__link">
-    Reference MLBox runners
+  <a href="#reference-mlcommons-box-runners" class="md-nav__link">
+    Reference MLCommons-Box runners
   </a>
   
 </li>
@@ -365,8 +365,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#reference-mlbox-runners" class="md-nav__link">
-    Reference MLBox runners
+  <a href="#reference-mlcommons-box-runners" class="md-nav__link">
+    Reference MLCommons-Box runners
   </a>
   
 </li>
@@ -402,43 +402,43 @@
                 
                 
                 <h1 id="runners">Runners<a class="headerlink" href="#runners" title="Permanent link">&para;</a></h1>
-<p>A runner is a tool that runs MLBox instances on one or multiple platforms. Examples of platforms are docker and
+<p>A runner is a tool that runs MLCommons-Box boxes on one or multiple platforms. Examples of platforms are docker and
 singularity containers, remote hosts, virtual machines in the cloud, etc.</p>
-<p>A platform is configured in a platform configuration file. An MLBox can provide reference platform configurations that
+<p>A platform is configured in a platform configuration file. A box can provide reference platform configurations that
 users can modify to meet requirements of their infrastructures.</p>
-<p>MLBox standard requires that all runners implement mandatory functionality. All reference runners implement it. Users
-can develop their own runners to meet their specific requirements, such as security, authentication and authorization 
-policies and others.   </p>
-<h2 id="reference-mlbox-runners">Reference MLBox runners<a class="headerlink" href="#reference-mlbox-runners" title="Permanent link">&para;</a></h2>
-<p>Reference MLBox runners are:<br />
-- <code>Docker Runner</code>: Run MLBoxes using docker runtime.<br />
-- <code>Singularity Runner</code>: Run MLBoxes using singularity runtime.<br />
-- <code>SSH Runner</code>: Run MLBox on a remote host. SSH Runner uses other runners, such as Docker or Singularity runners, to
-  run MLBoxes on remote hosts.  </p>
+<p>MLCommons-Box standard requires that all runners implement mandatory functionality. All reference runners implement it.
+Users can develop their own runners to meet their specific requirements, such as security, authentication and
+authorization policies and others.   </p>
+<h2 id="reference-mlcommons-box-runners">Reference MLCommons-Box runners<a class="headerlink" href="#reference-mlcommons-box-runners" title="Permanent link">&para;</a></h2>
+<p>Reference runners are:<br />
+- <code>Docker Runner</code>: Runs boxes using docker runtime.<br />
+- <code>Singularity Runner</code>: Runs boxes using singularity runtime.<br />
+- <code>SSH Runner</code>: Runs boxes on remote hosts. SSH Runner uses other runners, such as Docker or Singularity runners, to
+  run boxes on remote hosts.  </p>
 <h2 id="runner-commands">Runner commands<a class="headerlink" href="#runner-commands" title="Permanent link">&para;</a></h2>
 <p>Each runner exposes mandatory and optional functionality through a set of commands. This is similar to, for instance,
-how Git implements its API (<code>git</code> follows by a specific command such as <code>checkout</code>, <code>pull</code>, <code>push</code> etc). Mandatory
-commands are <code>configure</code> and <code>run</code>:<br />
-- <code>configure</code>: Configure MLBox. Exact functionality depends on a runner type, but the goal is to ensure that MLBox is
-  ready to run. The following are the examples of what can be done at configure phase: build docker or singularity
-  container, create python virtual environment, allocate and configure virtual machine in the cloud, copy MLBox to a
-  remote host etc. Once configuration is successfully completed, it is assumed a runner can run MLBox.<br />
-- <code>run</code>: Run MLBox's task.  </p>
-<p>Reference MLBox runners recognize three parameters - mlbox, platform and task.<br />
-- <code>mlbox</code>: Path to MLBox root directory. In future versions, this can be a MLBox URI with a specific protocol. Runners
-  could support various MLBox implementations (excluding reference directory-based) such as docker/singularity 
+how Git implements its CLI (<code>git</code> followed by a specific command such as <code>checkout</code>, <code>pull</code>, <code>push</code> etc). Mandatory
+MLCommons-Box runner commands are <code>configure</code> and <code>run</code>:<br />
+- <code>configure</code>: Configure MLCommons-Box. Exact functionality depends on a runner type, but the goal is to ensure that 
+  a box is ready to run. The following are the examples of what can be done at configure phase: build docker or 
+  singularity container, create python virtual environment, allocate and configure virtual machine in the cloud, copy
+  box to a remote host etc. Once configuration is successfully completed, it is assumed a runner can run that box.<br />
+- <code>run</code>: Run tasks defined in MLCommons-Box.  </p>
+<p>Reference runners recognize three parameters - mlbox, platform and task.<br />
+- <code>mlbox</code>: Path to a box root directory. In future versions, this can be an URI with a specific protocol. Runners
+  could support various MLCommons-Box implementations (excluding reference directory-based) such as docker/singularity 
   containers, GitHub repositories, compressed archives and others.<br />
-- <code>platform</code>: Path to a YAML-based platform configuration file. If not present, MLBox runner should use the
-  default platforms to run an MLBox, or select the most appropriate or available in a user environment.<br />
-- <code>task</code>: Path to a YAML-based task specification file. If not present, MLBox can run the default task.  </p>
+- <code>platform</code>: Path to a YAML-based platform configuration file. If not present, a runner should use the
+  default platforms to run a box, or select the most appropriate or available in a user environment.<br />
+- <code>task</code>: Path to a YAML-based task specification file. If not present, a runner can run the default task.  </p>
 <h2 id="command-line-interface">Command line interface<a class="headerlink" href="#command-line-interface" title="Permanent link">&para;</a></h2>
-<p>One way to run an MLBox is to follow the following template supported by all reference runners:
-<div class="highlight"><pre><span></span><code>python -m RUNNER_PACKAGE --mlbox=MLBOX_ROOT_DIRECTORY --platform=PLATFORM_FILE_PATH --task=TASK_FILE_PATH
+<p>One way to run a MLCommons-Box is to follow the following template supported by all reference runners:
+<div class="highlight"><pre><span></span><code>python -m RUNNER_PACKAGE --mlbox=MLCOMMONS_BOX_ROOT_DIRECTORY --platform=PLATFORM_FILE_PATH --task=TASK_FILE_PATH
 </code></pre></div></p>
-<p>Example command to configure MNIST Docker-based MLBox:
+<p>Example command to configure MNIST Docker-based MLCommons-Box:
 <div class="highlight"><pre><span></span><code>python -m mlbox_docker_run configure --mlbox=examples/mnist --platform=examples/mnist/platform/docker.yaml
 </code></pre></div></p>
-<p>Example command to run two tasks implemented by the MNIST Docker-based MLBox:
+<p>Example command to run two tasks implemented by the MNIST Docker-based MLCommons-Box:
 <div class="highlight"><pre><span></span><code>python -m mlbox_docker_run run --mlbox=examples/mnist --platform=examples/mnist/platform/docker.yaml --task=examples/mnist/run/download.yaml
 python -m mlbox_docker_run run --mlbox=examples/mnist --platform=examples/mnist/platform/docker.yaml --task=examples/mnist/run/train.yaml
 </code></pre></div></p>

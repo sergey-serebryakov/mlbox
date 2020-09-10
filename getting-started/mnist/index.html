@@ -242,11 +242,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mlbox-implementation" class="md-nav__link">
-    MLBox implementation
+  <a href="#mlcommons-box-implementation" class="md-nav__link">
+    MLCommons-Box implementation
   </a>
   
-    <nav class="md-nav" aria-label="MLBox implementation">
+    <nav class="md-nav" aria-label="MLCommons-Box implementation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -257,8 +257,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mlbox-definition-file" class="md-nav__link">
-    MLBox definition file
+  <a href="#mlcommons-box-definition-file" class="md-nav__link">
+    MLCommons-Box definition file
   </a>
   
 </li>
@@ -297,30 +297,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mnist-mlbox-directory-structure-summary" class="md-nav__link">
-    MNIST MLBox directory structure summary
+  <a href="#mnist-mlcommons-box-directory-structure-summary" class="md-nav__link">
+    MNIST MLCommons-Box directory structure summary
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#running-mnist-mlbox" class="md-nav__link">
-    Running MNIST MLBox
+  <a href="#running-mnist-mlcommons-box" class="md-nav__link">
+    Running MNIST MLCommons-Box
   </a>
   
-    <nav class="md-nav" aria-label="Running MNIST MLBox">
+    <nav class="md-nav" aria-label="Running MNIST MLCommons-Box">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#docker-runner" class="md-nav__link">
-    Docker runner
+    Docker Runner
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#singularity-runner" class="md-nav__link">
-    Singularity runner
+    Singularity Runner
   </a>
   
 </li>
@@ -447,11 +447,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mlbox-implementation" class="md-nav__link">
-    MLBox implementation
+  <a href="#mlcommons-box-implementation" class="md-nav__link">
+    MLCommons-Box implementation
   </a>
   
-    <nav class="md-nav" aria-label="MLBox implementation">
+    <nav class="md-nav" aria-label="MLCommons-Box implementation">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -462,8 +462,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#mlbox-definition-file" class="md-nav__link">
-    MLBox definition file
+  <a href="#mlcommons-box-definition-file" class="md-nav__link">
+    MLCommons-Box definition file
   </a>
   
 </li>
@@ -502,30 +502,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mnist-mlbox-directory-structure-summary" class="md-nav__link">
-    MNIST MLBox directory structure summary
+  <a href="#mnist-mlcommons-box-directory-structure-summary" class="md-nav__link">
+    MNIST MLCommons-Box directory structure summary
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#running-mnist-mlbox" class="md-nav__link">
-    Running MNIST MLBox
+  <a href="#running-mnist-mlcommons-box" class="md-nav__link">
+    Running MNIST MLCommons-Box
   </a>
   
-    <nav class="md-nav" aria-label="Running MNIST MLBox">
+    <nav class="md-nav" aria-label="Running MNIST MLCommons-Box">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#docker-runner" class="md-nav__link">
-    Docker runner
+    Docker Runner
   </a>
   
 </li>
         
           <li class="md-nav__item">
   <a href="#singularity-runner" class="md-nav__link">
-    Singularity runner
+    Singularity Runner
   </a>
   
 </li>
@@ -553,9 +553,11 @@
                 
                 <h1 id="mnist">MNIST<a class="headerlink" href="#mnist" title="Permanent link">&para;</a></h1>
 <p>The <a href="http://yann.lecun.com/exdb/mnist/">MNIST dataset</a> is a collection of 60,000 handwritten digits widely used for
-training statistical, Machine Learning and Deep Learning models. The MNIST MLBox example demonstrates how data
-scientists, ML and DL researchers and developers can package their training/validation/inference code as a MLBox to
-achieve portability and reproducibility.</p>
+training statistical, Machine Learning (ML) and Deep Learning (DL) models. The MNIST MLCommons-Box example demonstrates
+how data scientists, ML and DL researchers and developers can distribute their ML projects (including training,
+validation and inference code) as MLCommons-Box boxes. MLCommons-Box establishes a standard to package user workloads,
+and provides unified command line interface. In addition, MLCommons-Box provides a number of reference runners - python
+packages that can run boxes on different platforms including docker and singularity.</p>
 <blockquote>
 <p>A data scientist has been working on a machine learning project. The goal is to train a simple neural network to
 classify collection of 60,000 small images into 10 classes. </p>
@@ -566,8 +568,8 @@ splitting into train/validation/test data sets, running hyper-parameter optimiza
 model testing. It is a relatively small and well studied dataset that provides standard train/test split. In this simple
 example a developer needs to implement two steps - (1) downloading data and (2) training a model. We'll call these steps
 as <code>tasks</code>. Each task requires several parameters, such as URL of the data set that we need to download, location on a
-local disk where the data set will be serialized, path to a directory that will contain training artifacts such as logs
-and models. We can characterize these two tasks in the following way:<br />
+local disk where the data set will be serialized, path to a directory that will contain training artifacts such as log
+files, training snapshots and ML models. We can characterize these two tasks in the following way:<br />
 - <code>Data Download</code> task:<br />
   - <strong>Inputs</strong>: None. We'll assume the download URL is defined in the source code.<br />
   - <strong>Outputs</strong>: Directory to serialize the data set (<code>data_dir</code>) and directory to serialize log files (<code>log_dir</code>).<br />
@@ -584,28 +586,29 @@ different ways to implement the MNIST example. For simplicity, we assume the fol
 - The download task accepts additional data directory parameter. <br />
 - The train task accepts such parameters as data and model directories, path to a file with hyper-parameter.
 - Configurable hyper-parameters are: (1) optimizer name, (2) number of training epochs and (3) global batch size. </p>
-<p>Then, our implementation could look like this. Parse command line and identify task. If it is <code>download</code>, call function
-that downloads data sets. If it is <code>train</code>, train a model. This is sort of single entrypoint implementation where we 
-run one script asking to perform various tasks. We run our script (mnist.py) in the following way:
+<p>Then, our implementation could look like this. Parse command line and identify task. If it is <code>download</code>, call a
+function that downloads data sets. If it is <code>train</code>, train a model. This is sort of single entrypoint implementation
+where we run one script asking to perform various tasks. We run our script (mnist.py) in the following way:
 <div class="highlight"><pre><span></span><code>python mnist.py download --data_dir=PATH --log_dir=PATH
 python mnist.py train --data_dir=PATH --log_dir=PATH --model_dir=PATH --parameters_file=PATH
 </code></pre></div></p>
-<h2 id="mlbox-implementation">MLBox implementation<a class="headerlink" href="#mlbox-implementation" title="Permanent link">&para;</a></h2>
-<p>Packaging our MNIST training script as a MLBox is done in several steps. We will be using a directory-based MLBox where
-a directory is structured in a certain way and contains specific files that make it MLBox. We need to create an empty
-directory on a local disk. Let's assume we call it <code>mnist</code> and we'll use <code>{MLBOX_ROOT}</code> to denote a full path to this
-directory. This is called a MLBox root directory. At this point this directory is empty:
+<h2 id="mlcommons-box-implementation">MLCommons-Box implementation<a class="headerlink" href="#mlcommons-box-implementation" title="Permanent link">&para;</a></h2>
+<p>Packaging our MNIST training script as a MLCommons-Box is done in several steps. We will be using a directory-based 
+box where a directory is structured in a certain way and contains specific files that make it MLCommons-Box compliant.
+We need to create an empty directory on a local disk. Let's assume we call it <code>mnist</code> and we'll use
+<code>{MLCOMMONS_BOX_ROOT}</code> to denote a full path to this directory. This is called a box root directory. At this point this
+directory is empty:
 <div class="highlight"><pre><span></span><code>mnist/
 </code></pre></div></p>
 <h3 id="build-location">Build location<a class="headerlink" href="#build-location" title="Permanent link">&para;</a></h3>
-<p>MLBox directory has a sub-directory called <code>build</code> (<code>{MLBOX_ROOT}/build</code>) that store project source files, resources
-required for training, other files to recreate run time (such as requirements.txt, docker and singularity recipes etc.).<br />
-We need to create the build directory and copy two files: mnist.py that implements training and requirements.txt that
-lists python dependencies. By doing so, we are enforcing reproducibility. A developer of this MLBox wants to make it 
-easier to run their training workload in a great variety of environments including universities, commercial companies,
-HPC-friendly organizations such as national labs. One way to achieve it is to use container runtime such as docker or
-singularity. So, we'll provide both docker file and singularity recipe that we'll put into <code>build</code> directory as well.
-Thus, we'll make this directory a build context. The mlbox directory now looks like:
+<p>The box directory has a sub-directory called <code>build</code> (<code>{MLCOMMONS_BOX_ROOT}/build</code>) that stores project source files,
+resources required for training, other files to recreate run time (such as requirements.txt, docker and singularity
+recipes etc.). We need to create the build directory and copy two files: mnist.py that implements training and
+requirements.txt that lists python dependencies. By doing so, we are enforcing reproducibility. A developer of this 
+box wants to make it easier to run their training workload in a great variety of environments including universities, 
+commercial companies, HPC-friendly organizations such as national labs. One way to achieve it is to use container
+runtime such as docker or singularity. So, we'll provide both docker file and singularity recipe that we'll put into
+<code>build</code> directory as well. Thus, we'll make this directory a build context. The box directory now looks like:
 <div class="highlight"><pre><span></span><code>mnist/
   build/
     mnist.py
@@ -615,15 +618,16 @@ Thus, we'll make this directory a build context. The mlbox directory now looks l
 </code></pre></div>
 A good test at this point would be ensure that project is runnable from the build directory, and docker and singularity
 images can be built.  </p>
-<h3 id="mlbox-definition-file">MLBox definition file<a class="headerlink" href="#mlbox-definition-file" title="Permanent link">&para;</a></h3>
-<p>At this point we are ready to create a MLBox definition file. This is the first definition file that makes some folder a
-MLBox. This is a YAML file that provides information such as name, author, version, named as <code>mlbox.yaml</code> and located
-in the root MLBox directory . The most important section is the one that lists what tasks are implemented in this MLBox:
+<h3 id="mlcommons-box-definition-file">MLCommons-Box definition file<a class="headerlink" href="#mlcommons-box-definition-file" title="Permanent link">&para;</a></h3>
+<p>At this point we are ready to create a box definition file. This is the first definition file that makes some folder a
+MLCommons-Box folder. This is a YAML file that provides information such as name, author, version, named as <code>mlbox.yaml</code>
+and located in the box root directory . The most important section is the one that lists what tasks are implemented in
+this box:
 <div class="highlight"><pre><span></span><code><span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>                            <span class="c1"># We use MLSpec library to validate YAML definition files. This is the</span>
 <span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlbox_root</span>                          <span class="c1"># specification of the schema that this file must be consistent with. </span>
 
-<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mnist</span>                                      <span class="c1"># Name of this MLBox.</span>
-<span class="nt">author</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MLPerf Best Practices Working Group</span>      <span class="c1"># A developer of the MLBox.</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mnist</span>                                      <span class="c1"># Name of this box.</span>
+<span class="nt">author</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MLPerf Best Practices Working Group</span>      <span class="c1"># A developer of the box.</span>
 <span class="nt">version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.1.0</span>                                   <span class="c1"># MLBox version.</span>
 <span class="nt">mlbox_spec_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.1.0</span>                        <span class="c1"># TODO: What is it?</span>
 
@@ -637,8 +641,8 @@ At this point, the directory looks like:
   mlbox.yaml
 </code></pre></div></p>
 <h3 id="task-definition-file">Task definition file<a class="headerlink" href="#task-definition-file" title="Permanent link">&para;</a></h3>
-<p>The MLBox definition file references two tasks defined in the <code>tasks</code> subdirectory. Each YAML file there defines a 
-task supported by the MLBox. Task files are named the same as tasks. We need to create a tasks directory and two files
+<p>The box definition file references two tasks defined in the <code>tasks</code> subdirectory. Each YAML file there defines a 
+task supported by the box. Task files are named the same as tasks. We need to create a tasks directory and two files
 inside that directory - <code>download.yaml</code> and <code>train.yaml</code>.</p>
 <p>Each task file defines input and output specifications for each task. The download task (download.yaml) is defined:
 <div class="highlight"><pre><span></span><code><span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>           <span class="c1"># Task schema definition. Leave this two fields as is.</span>
@@ -684,9 +688,9 @@ At this point, the MLBox directory looks like:
   mlbox.yaml
 </code></pre></div></p>
 <h3 id="workspace">Workspace<a class="headerlink" href="#workspace" title="Permanent link">&para;</a></h3>
-<p>The workspace is a directory inside MLBox (<code>workspace</code>) where, by default, input/output file system artifacts are
+<p>The workspace is a directory inside box (<code>workspace</code>) where, by default, input/output file system artifacts are
 stored. The are multiple reasons to have one. One is to formally have default place for data sets, configuration
-and log files etc. Having all these parameters in one place makes it simpler to run MLBoxes on remote hosts and then
+and log files etc. Having all these parameters in one place makes it simpler to run boxes on remote hosts and then
 sync results back to users' local machines.</p>
 <p>We need to be able to provide collection of hyper-parameters and formally define a directory to store logs, models and
 MNIST data set. To do so, we create the directory tree <code>workspace/parameters</code>, and then create a file 
@@ -695,7 +699,7 @@ MNIST data set. To do so, we create the directory tree <code>workspace/parameter
 <span class="nt">train_epochs</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
 <span class="nt">batch_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">32</span>
 </code></pre></div>
-At this point, the MLBox directory looks like:
+At this point, the box directory looks like:
 <div class="highlight"><pre><span></span><code>mnist/
   build/ {mnist.py, requirements.txt, Dockerfile, Singularity.recipe}
   tasks/ {download.yaml, train.yaml}
@@ -705,11 +709,11 @@ At this point, the MLBox directory looks like:
   mlbox.yaml
 </code></pre></div></p>
 <h3 id="run-configurations">Run configurations<a class="headerlink" href="#run-configurations" title="Permanent link">&para;</a></h3>
-<p>MLBox definition file (<code>mlbox.yaml</code>) provides paths to task definition files that formally define tasks input/output
-parameters. A run configuration assigns values to task parameters. One reason to define and "implement" parameters in
-different files is to be able to provide multiple configurations for the same task. One example could be one-GPU
-training configuration and 8-GPU training configuration. Since we have two tasks - download and train - we need to 
-define at least two run configurations. Run configurations are defined in the <code>run</code> subdirectory.  </p>
+<p>The MLCommons-Box definition file (<code>mlbox.yaml</code>) provides paths to task definition files that formally define tasks
+input/output parameters. A run configuration assigns values to task parameters. One reason to define and "implement" 
+parameters in different files is to be able to provide multiple configurations for the same task. One example could be 
+one-GPU training configuration and 8-GPU training configuration. Since we have two tasks - download and train - we need 
+to define at least two run configurations. Run configurations are defined in the <code>run</code> subdirectory.  </p>
 <p>Run configuration for the download task looks like:
 <div class="highlight"><pre><span></span><code><span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlbox_invoke</span>                     <span class="c1"># Run (invoke) schema definition. Leave this two fields as is.</span>
 <span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
@@ -722,9 +726,9 @@ define at least two run configurations. Run configurations are defined in the <c
         <span class="nt">data_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$WORKSPACE/data</span>             <span class="c1">#    Path to serialize downloaded MNIST data set</span>
         <span class="nt">log_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$WORKSPACE/download_logs</span>     <span class="c1">#    Path to log files.</span>
 </code></pre></div>
-The <code>$WORKSPACE</code> token is replaced with actual path to the MLBox workspace. File system paths are relative to the
-workspace directory. This makes it possible to provide absolute paths for cases when data sets are stored on some
-shared drives. Run configuration for the train task looks like:
+The <code>$WORKSPACE</code> token is replaced with actual path to the box workspace. File system paths are relative to the
+workspace directory. This makes it possible to provide absolute paths for cases when data sets are stored on shared
+drives. Run configuration for the train task looks like:
 <div class="highlight"><pre><span></span><code><span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlbox_invoke</span>                     <span class="c1"># Run (invoke) schema definition. Leave this two fields as is.</span>
 <span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
 
@@ -738,7 +742,7 @@ shared drives. Run configuration for the train task looks like:
         <span class="nt">log_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$WORKSPACE/train_logs</span>
         <span class="nt">model_dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">$WORKSPACE/model</span>
 </code></pre></div>
-At this point, the MLBox directory looks like:
+At this point, the box directory looks like:
 <div class="highlight"><pre><span></span><code>mnist/
   build/ {mnist.py, requirements.txt, Dockerfile, Singularity.recipe}
   tasks/ {download.yaml, train.yaml}
@@ -749,14 +753,14 @@ At this point, the MLBox directory looks like:
   mlbox.yaml
 </code></pre></div></p>
 <h3 id="platform-configurations">Platform configurations<a class="headerlink" href="#platform-configurations" title="Permanent link">&para;</a></h3>
-<p>Platform configurations define how MLBoxes run. Docker, Singularity, SSH and cloud runners have their own 
+<p>Platform configurations define how MLCommons-Box boxes run. Docker, Singularity, SSH and cloud runners have their own 
 configurations. For instance, Docker platform configuration at minimum provides image name and docker executable 
 (docker / nvidia-docker). SSH platform configuration could provide IP address of a remote host, login credentials etc.
 Platform configurations are supposed to be used by runners, and each runner has its own platform schema. The <code>Runners</code>
 documentation section provides detailed description of reference runners together with platform configuration schemas. 
 Since we wanted to support Docker and Singularity runtimes, we provide <code>docker.yaml</code> and <code>singularity.yaml</code> files in
-the <code>platforms</code> subdirectory that is default location to store these types of files. Docker platform configuration is the
-following:
+the <code>platforms</code> subdirectory that is default location to store these types of files. Docker platform configuration is
+the following:
 <div class="highlight"><pre><span></span><code><span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
 <span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlbox_docker</span>
 
@@ -769,7 +773,7 @@ following:
 
 <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">/opt/singularity/mlperf_mlbox_mnist-0.01.simg</span>   <span class="c1"># Path to or name of a Singularity image.</span>
 </code></pre></div>
-At this point, the MLBox directory looks like:
+At this point, the box directory looks like:
 <div class="highlight"><pre><span></span><code>mnist/
   build/ {mnist.py, requirements.txt, Dockerfile, Singularity.recipe}
   tasks/ {download.yaml, train.yaml}
@@ -780,7 +784,7 @@ At this point, the MLBox directory looks like:
     singularity.yaml
   mlbox.yaml
 </code></pre></div></p>
-<h2 id="mnist-mlbox-directory-structure-summary">MNIST MLBox directory structure summary<a class="headerlink" href="#mnist-mlbox-directory-structure-summary" title="Permanent link">&para;</a></h2>
+<h2 id="mnist-mlcommons-box-directory-structure-summary">MNIST MLCommons-Box directory structure summary<a class="headerlink" href="#mnist-mlcommons-box-directory-structure-summary" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">mnist/</span>                                   <span class="c1"># MLBox root directory.</span>
     <span class="l l-Scalar l-Scalar-Plain">build/</span>                               <span class="c1"># Project source code, resource files, Docker/Singularity recipes.</span>
         <span class="l l-Scalar l-Scalar-Plain">mnist.py</span>                         <span class="c1">#    Python source code training simple neural network using MNIST data set.</span>
@@ -802,8 +806,8 @@ At this point, the MLBox directory looks like:
   <span class="l l-Scalar l-Scalar-Plain">mlbox.yaml</span>                             <span class="c1"># MLBox definition file.</span>
 </code></pre></div>
 
-<h2 id="running-mnist-mlbox">Running MNIST MLBox<a class="headerlink" href="#running-mnist-mlbox" title="Permanent link">&para;</a></h2>
-<p>This tutorial covers the case when MLBox library and MNIST MLBox are cloned from the GitHub repository:
+<h2 id="running-mnist-mlcommons-box">Running MNIST MLCommons-Box<a class="headerlink" href="#running-mnist-mlcommons-box" title="Permanent link">&para;</a></h2>
+<p>This tutorial covers the case when both MLCommons-Box library and the MNIST box are cloned from the GitHub repository:
 <div class="highlight"><pre><span></span><code>git clone https://github.com/mlperf/mlbox ./mlbox
 cd ./mlbox
 </code></pre></div></p>
@@ -811,34 +815,34 @@ cd ./mlbox
 <div class="highlight"><pre><span></span><code>virtualenv -p python3.8 ./env
 source ./env/bin/activate
 pip install typer mlspeclib
-export PYTHONPATH=$(pwd)/mlcommons_box:$(pwd)/runners/mlbox_singularity_run:$(pwd)/runners/mlbox_docker_run:$(pwd)/runners/mlbox_ssh_run
+export PYTHONPATH=$(pwd)/mlcommons_box:$(pwd)/runners/mlcommons_box_singularity_run:$(pwd)/runners/mlcommons_box_docker_run:$(pwd)/runners/mlcommons_box_ssh_run
 </code></pre></div></p>
 <p>Optionally, setup host environment by providing the correct <code>http_proxy</code> and <code>https_proxy</code> environmental variables.
 <div class="highlight"><pre><span></span><code>export http_proxy=...
 export https_proxy=...
 </code></pre></div></p>
 <blockquote>
-<p>Before running MNIST MLBox below, it is probably a good idea to remove tasks' outputs from previous runs that are
+<p>Before running MNIST box below, it is probably a good idea to remove tasks' outputs from previous runs that are
 located in <code>examples/mnist/workspace</code>. All directories except <code>parameters</code> can be removed.</p>
 </blockquote>
-<h3 id="docker-runner">Docker runner<a class="headerlink" href="#docker-runner" title="Permanent link">&para;</a></h3>
-<p>Configure MNIST MLBox:
-<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run configure --mlbox=examples/mnist --platform=examples/mnist/platforms/docker.yaml
+<h3 id="docker-runner">Docker Runner<a class="headerlink" href="#docker-runner" title="Permanent link">&para;</a></h3>
+<p>Configure MNIST box:
+<div class="highlight"><pre><span></span><code>python -m mlcommons_box_docker_run configure --mlbox=examples/mnist --platform=examples/mnist/platforms/docker.yaml
 </code></pre></div></p>
 <p>Run two tasks - <code>download</code> (download data) and <code>train</code> (train tiny neural network):
-<div class="highlight"><pre><span></span><code>python -m mlbox_docker_run run --mlbox=examples/mnist --platform=examples/mnist/platforms/docker.yaml --task=examples/mnist/run/download.yaml
-python -m mlbox_docker_run run --mlbox=examples/mnist --platform=examples/mnist/platforms/docker.yaml --task=examples/mnist/run/train.yaml
+<div class="highlight"><pre><span></span><code>python -m mlcommons_box_docker_run run --mlbox=examples/mnist --platform=examples/mnist/platforms/docker.yaml --task=examples/mnist/run/download.yaml
+python -m mlcommons_box_docker_run run --mlbox=examples/mnist --platform=examples/mnist/platforms/docker.yaml --task=examples/mnist/run/train.yaml
 </code></pre></div></p>
-<h3 id="singularity-runner">Singularity runner<a class="headerlink" href="#singularity-runner" title="Permanent link">&para;</a></h3>
+<h3 id="singularity-runner">Singularity Runner<a class="headerlink" href="#singularity-runner" title="Permanent link">&para;</a></h3>
 <p>Update path to store Singularity image. Open <code>examples/mnist/platforms/singularity.yaml</code> and update the <code>image</code> value
 that is set by default to <code>/opt/singularity/mlperf_mlbox_mnist-0.01.simg</code> (relative paths are supported, they are
 relative to <code>examples/mnist/workspace</code>).  </p>
-<p>Configure MNIST MLBox:
-<div class="highlight"><pre><span></span><code>python -m mlbox_singularity_run configure --mlbox=examples/mnist --platform=examples/mnist/platforms/singularity.yaml
+<p>Configure MNIST box:
+<div class="highlight"><pre><span></span><code>python -m mlcommons_box_singularity_run configure --mlbox=examples/mnist --platform=examples/mnist/platforms/singularity.yaml
 </code></pre></div></p>
 <p>Run two tasks - <code>download</code> (download data) and <code>train</code> (train tiny neural network):
-<div class="highlight"><pre><span></span><code>python -m mlbox_singularity_run run --mlbox=examples/mnist --platform=examples/mnist/platforms/singularity.yaml --task=examples/mnist/run/download.yaml
-python -m mlbox_singularity_run run --mlbox=examples/mnist --platform=examples/mnist/platforms/singularity.yaml --task=examples/mnist/run/train.yaml
+<div class="highlight"><pre><span></span><code>python -m mlcommons_box_singularity_run run --mlbox=examples/mnist --platform=examples/mnist/platforms/singularity.yaml --task=examples/mnist/run/download.yaml
+python -m mlcommons_box_singularity_run run --mlbox=examples/mnist --platform=examples/mnist/platforms/singularity.yaml --task=examples/mnist/run/train.yaml
 </code></pre></div></p>
                 
               

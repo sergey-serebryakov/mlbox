@@ -402,53 +402,53 @@
                 
                 
                 <h1 id="ssh-runner">SSH Runner<a class="headerlink" href="#ssh-runner" title="Permanent link">&para;</a></h1>
-<p>SSH runner uses other runners to run MLBoxes on remote hosts. It uses <code>ssh</code> and <code>rsync</code> internally. It supports two
-mandatory commands - <code>configure</code> and <code>run</code> with standard arguments - <code>mlbox</code>, <code>platform</code> and <code>task</code>. SSH platform
-configuration is used to configure SSH runner.</p>
+<p>SSH runner uses other runners to run MLCommons-Box boxes on remote hosts. It uses <code>ssh</code> and <code>rsync</code> internally. It
+supports two mandatory commands - <code>configure</code> and <code>run</code> with standard arguments - <code>mlbox</code>, <code>platform</code> and <code>task</code>. SSH
+platform configuration is used to configure SSH runner.</p>
 <blockquote>
-<p>This runner is being actively developed and not features described on this page  may be supported.</p>
+<p>This runner is being actively developed and not all features described on this page may be supported.</p>
 </blockquote>
 <h2 id="platform-configuration-file">Platform Configuration File<a class="headerlink" href="#platform-configuration-file" title="Permanent link">&para;</a></h2>
-<p>SSH platform configuration file is a YAML file. The configuration file for the reference MNIST MLBox is the following:
+<p>SSH platform configuration file is a YAML file. The configuration file for the reference MNIST box is the following:
 <div class="highlight"><pre><span></span><code><span class="nt">host</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">REMOTE_HOST</span>     <span class="c1"># Remote host IP address.</span>
 <span class="nt">user</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">USER</span>            <span class="c1"># User name, assuming passwordless authentication using keys has been set up.</span>
-<span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">docker.yaml</span> <span class="c1"># How to run MLBox</span>
+<span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">docker.yaml</span> <span class="c1"># How to run this box on a remote host - use Docker Runner</span>
 <span class="nt">env</span><span class="p">:</span>                  <span class="c1"># This is for syncing MLBox library itself (library, runners etc.)</span>
     <span class="nt">path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">./mlbox</span>     <span class="c1"># Path on a remote node, this is the default value. Relative paths are relative to use home dir.</span>
     <span class="nt">sync</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
-    <span class="nt">interpreter</span><span class="p">:</span>      <span class="c1"># Environment for running runners, mlbox can have its own interpreter. Dependencies must be inst.</span>
+    <span class="nt">interpreter</span><span class="p">:</span>      <span class="c1"># Host environment for runners, box can have its own interpreter. Dependencies must be installed.</span>
         <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">system</span>
         <span class="nt">python</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">python3.6</span>   <span class="c1"># Can also be an absolute path to user python environment (virtualenv, conda etc.)</span>
     <span class="nt">variables</span><span class="p">:</span> <span class="p p-Indicator">{}</span>    <span class="c1"># Environmental variables (will be used by docker build/run), remove &#39;{}&#39; if variables present.</span>
         <span class="c1"># http_proxy:</span>
         <span class="c1"># https_proxy:</span>
-<span class="nt">mlbox</span><span class="p">:</span>                <span class="c1"># Remote location of the MLBox to run</span>
+<span class="nt">mlbox</span><span class="p">:</span>                <span class="c1"># Remote location of the box to run</span>
     <span class="nt">path</span><span class="p">:</span>             <span class="c1"># Null, the path will be set to ./.mlbox/mlboxes/mnist-${version}</span>
     <span class="nt">sync</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
 </code></pre></div></p>
 <p>SSH runner uses IP or name of a remote host (<code>host</code>) and ssh tool to login and execute shell commands on remote hosts. 
 It uses user name (<code>user</code>) for authentication. If passwordless login is not configured, SSH runner asks for password
 many times during configure and run phases.  </p>
-<p>SSH runner depends on other runners to run MLBoxes. The <code>platform</code> field specifies what runner should be used on a 
-remote host. This is a file name relative to <code>{MLBOX_ROOT}/platforms</code>.  </p>
-<p>In current implementation, SSH runner synchronizes both MLBox library and MLBox workload between local and remote hosts.
-This is optional.</p>
+<p>SSH runner depends on other runners to run MLCommons-Box boxes. The <code>platform</code> field specifies what runner should be
+used on a remote host. This is a file name relative to <code>{MLCOMMONS_BOX_ROOT}/platforms</code>.  </p>
+<p>In current implementation, SSH runner synchronizes both MLCommons-Box library and a box workload between local and
+remote hosts. This is optional, and in the future versions, when the library and runners are installed using pip, this
+will not be required.</p>
 <h2 id="build-command">Build command<a class="headerlink" href="#build-command" title="Permanent link">&para;</a></h2>
 <p>During the <code>build</code> phase, the following steps are performed.<br />
-1. If MLBox library (source tree) needs to be synchronized, SSH runner:<br />
-   - Uses <code>ssh</code> to create root directory for the MLBox library.<br />
-   - <code>Uses</code> <code>rsync</code> to synchronize the following MLBox directories: <code>mlcommons_box</code> and <code>runners</code>.<br />
-2. If MLBox workload needs to be synchronized, SSH runner:<br />
-   - Uses <code>ssh</code> to create root directory for the MLBox workload.<br />
-   - <code>Uses</code> <code>rsync</code> to synchronize the entire content of the MLBox workload.<br />
+1. If MLCommons-Box library (source tree) needs to be synchronized, SSH runner:<br />
+   - Uses <code>ssh</code> to create root directory for the library.<br />
+   - <code>Uses</code> <code>rsync</code> to synchronize the following library directories: <code>mlcommons_box</code> and <code>runners</code>.<br />
+2. If MLCommons-Box box needs to be synchronized, SSH runner:<br />
+   - Uses <code>ssh</code> to create root directory for the box on a remote host.<br />
+   - <code>Uses</code> <code>rsync</code> to synchronize the entire content of the box.<br />
 3. The only supported remote python environment is the <code>system</code>, and SSH runner assumes that all dependencies have been
-   installed. Two required python packages that are not common are <code>typer</code> and <code>mlspeclib</code>.<br />
-4. SSH runner uses <code>platform</code> file and runs standard <code>configure</code> command on a remote host. Only reference Docker and
-   Singularity runners are supported now.  </p>
+   installed. Two required python packages that are not common are <code>click</code> and <code>mlspeclib</code>.<br />
+4. SSH runner uses <code>platform</code> file and runs standard <code>configure</code> command on a remote host. </p>
 <h2 id="run-command">Run command<a class="headerlink" href="#run-command" title="Permanent link">&para;</a></h2>
 <p>During the run phase, the SSH runner performs the following steps:<br />
 1. It uses <code>ssh</code> to run standard <code>run</code> command on a remote host.<br />
-2. It uses <code>rsync</code> to synchronize back the content of the <code>{MLBOX_ROOT}/workspace</code> directory.   </p>
+2. It uses <code>rsync</code> to synchronize back the content of the <code>{MLCOMMONS_BOX_ROOT}/workspace</code> directory.   </p>
                 
               
               

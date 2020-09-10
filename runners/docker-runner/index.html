@@ -416,11 +416,12 @@
                 
                 
                 <h1 id="docker-runner">Docker Runner<a class="headerlink" href="#docker-runner" title="Permanent link">&para;</a></h1>
-<p>Docker runner uses docker/nvidia-docker to run MLBoxes. It supports two mandatory commands - <code>configure</code> and <code>run</code> with
-standard arguments - <code>mlbox</code>, <code>platform</code> and <code>task</code>. Docker platform configuration is used to configure docker runner.</p>
+<p>Docker runner uses docker/nvidia-docker to run MLCommons-Box boxes. It supports two mandatory commands - <code>configure</code> and
+<code>run</code> with standard arguments - <code>mlbox</code>, <code>platform</code> and <code>task</code>. Docker platform configuration is used to configure
+docker runner.</p>
 <h2 id="platform-configuration-file">Platform Configuration File<a class="headerlink" href="#platform-configuration-file" title="Permanent link">&para;</a></h2>
 <p>Docker platform configuration file is a YAML file that follows <code>mlbox_docker</code> ML schema. The configuration file for the
-reference MNIST MLBox is the following:
+reference MNIST box is the following:
 <div class="highlight"><pre><span></span><code><span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
 <span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlbox_docker</span>
 
@@ -433,31 +434,31 @@ configure and run phases:<br />
 - <strong>configure</strong>: <code>docker build ... --build-args http_proxy=${http_proxy} --build-args https_proxy=${https_proxy} ...</code><br />
 - <strong>run</strong>: <code>docker run ... -e http_proxy=${http_proxy} -e https_proxy=${https_proxy} ...</code>  </p>
 <h2 id="build-command">Build command<a class="headerlink" href="#build-command" title="Permanent link">&para;</a></h2>
-<p>Docker runner uses <code>{MLBOX_ROOT}/build</code> directory as the build context directory. This implies that all files that must
-be packaged in a docker image, must be located in that directory, including source files, python requirements, resource
-files, ML models etc. The docker recipe must have the standard name <code>Dockerfile</code>.</p>
+<p>Docker runner uses <code>{MLCOMMONS_BOX_ROOT}/build</code> directory as the build context directory. This implies that all files
+that must be packaged in a docker image, must be located in that directory, including source files, python requirements,
+resource files, ML models etc. The docker recipe must have the standard name <code>Dockerfile</code>.</p>
 <p>In current implementation, only docker <code>build</code> is supported (i.e., Dockerfile must present). In future releases, Docker
 runner will support docker <code>pull</code> as well.</p>
 <p>Docker runner under the hood runs the following command line:<br />
 <div class="highlight"><pre><span></span><code>cd {build_path}; docker build {env_args} -t {image_name} -f Dockerfile .
 </code></pre></div>
 where:<br />
-- <code>{build_path}</code> is <code>{MLBOX_ROOT}/build</code> root directory.<br />
-- <code>{env_args}</code> is the arguments retrieved from user environment, currently, only <code>http_proxy</code> and <code>https_proxy</code> are
+- <code>{build_path}</code> is <code>{MLCOMMONS_BOX_ROOT}/build</code> root directory.<br />
+- <code>{env_args}</code> is the arguments retrieved from user environment. Currently, only <code>http_proxy</code> and <code>https_proxy</code> are
   supported.<br />
--  <code>{image_name}</code> is the image name from the platform configuration file.  </p>
+-  <code>{image_name}</code> is the image name defined in the platform configuration file.  </p>
 <h2 id="run-command">Run command<a class="headerlink" href="#run-command" title="Permanent link">&para;</a></h2>
 <p>Docker runner runs the following command:  <br />
 <div class="highlight"><pre><span></span><code>{docker_runtime} run --rm --net=host --privileged=true {volumes} {env_args} {image_name} {args}
 </code></pre></div>
 where:  <br />
 - <code>{docker_exec}</code> is the docker_runtime value from the Docker platform configuration file.<br />
-- <code>{volumes}</code> are the mount points that MLBox library automatically constructed based upon task input/output
+- <code>{volumes}</code> are the mount points that the runner automatically constructs based upon the task input/output
   specifications.<br />
 - <code>{env_args}</code> is the arguments retrieved from user environment, currently, only <code>http_proxy</code> and <code>https_proxy</code> are
   supported.<br />
 - <code>{image_name}</code> is the image name from the platform configuration file.<br />
-- <code>{args}</code> is the task command line arguments, constructed automatically by the MLBox library.  </p>
+- <code>{args}</code> is the task command line arguments, constructed automatically by the runner.  </p>
                 
               
               
