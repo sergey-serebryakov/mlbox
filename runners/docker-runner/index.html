@@ -436,15 +436,19 @@
                 <h1 id="docker-runner">Docker Runner<a class="headerlink" href="#docker-runner" title="Permanent link">&para;</a></h1>
 <p>Docker runner uses docker/nvidia-docker to run MLCommons-Box boxes. It supports two mandatory commands - <code>configure</code> and
 <code>run</code> with standard arguments - <code>mlbox</code>, <code>platform</code> and <code>task</code>. Docker platform configuration is used to configure
-docker runner.</p>
+docker runners.</p>
 <h2 id="platform-configuration-file">Platform Configuration File<a class="headerlink" href="#platform-configuration-file" title="Permanent link">&para;</a></h2>
-<p>Docker platform configuration file is a YAML file that follows <code>mlbox_docker</code> ML schema. The configuration file for the
+<p>Docker platform configuration file is a YAML file that follows <code>mlcommons_box_platform</code> ML schema. The configuration file for the
 reference MNIST box is the following:
-<div class="highlight"><pre><span></span><code><span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
-<span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlbox_docker</span>
+<div class="highlight"><pre><span></span><code><span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlcommons_box_platform</span>
+<span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.1.0</span>
 
-<span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlperf/mlbox:mnist</span>   <span class="c1"># Docker image name</span>
-<span class="nt">docker_runtime</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">docker</span>      <span class="c1"># Docker executable: docker or nvidia-docker</span>
+<span class="nt">platform</span><span class="p">:</span>
+  <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;docker&quot;</span>                                       <span class="c1"># &#39;docker&#39; or &#39;nvidia-docker&#39;.</span>
+  <span class="nt">version</span><span class="p">:</span> <span class="s">&quot;&gt;=18.01&quot;</span>                                   <span class="c1"># Reserved for future use.</span>
+<span class="nt">configuration</span><span class="p">:</span>
+  <span class="nt">image</span><span class="p">:</span> <span class="s">&quot;mlperf/mlbox:mnist&quot;</span>                          <span class="c1"># Docker image name.</span>
+  <span class="nt">parameters</span><span class="p">:</span> <span class="s">&quot;--rm</span><span class="nv"> </span><span class="s">--net=host</span><span class="nv"> </span><span class="s">--privileged=true&quot;</span>      <span class="c1"># Docker &#39;run&#39; parameters.</span>
 </code></pre></div></p>
 <h2 id="additional-configuration">Additional configuration<a class="headerlink" href="#additional-configuration" title="Permanent link">&para;</a></h2>
 <p>In current implementation, Docker runner uses <code>http_proxy</code> and <code>https_proxy</code> environmental variables (if set) during
@@ -456,7 +460,7 @@ configure and run phases:<br />
 that must be packaged in a docker image, must be located in that directory, including source files, python requirements,
 resource files, ML models etc. The docker recipe must have the standard name <code>Dockerfile</code>.</p>
 <p>If <code>Dockerfile</code> file exists in <code>{MLCOMMONS_BOX_ROOT}/build</code>, the Docker runner assumes that it needs to <code>build</code> a docker
-image. If that file does not exists, the Docker runner will try to <code>pull</code> image with the specified name.</p>
+image. If that file does not exist, the Docker runner will <code>pull</code> the docker image with the specified name.</p>
 <p>Docker runner under the hood runs the following command line:<br />
 <div class="highlight"><pre><span></span><code>cd {build_path}; docker build {env_args} -t {image_name} -f Dockerfile .
 </code></pre></div>
@@ -465,6 +469,7 @@ where:<br />
 - <code>{env_args}</code> is the arguments retrieved from user environment. Currently, only <code>http_proxy</code> and <code>https_proxy</code> are
   supported.<br />
 -  <code>{image_name}</code> is the image name defined in the platform configuration file.  </p>
+<p>When pulling and image, the command is the following: <code>docker pull {image_name}</code>. </p>
 <blockquote>
 <p>The <code>configure</code> command is optional and users do not necessarily need to be aware about it. The Docker runner
 auto-detects if docker image exists before running a task, and if it does not exist, the docker runner runs the 
@@ -474,15 +479,18 @@ the <code>configure</code> command explicitly.</p>
 </blockquote>
 <h2 id="running-mlboxes">Running MLBoxes<a class="headerlink" href="#running-mlboxes" title="Permanent link">&para;</a></h2>
 <p>Docker runner runs the following command:  <br />
-<div class="highlight"><pre><span></span><code>{docker_runtime} run --rm --net=host --privileged=true {volumes} {env_args} {image_name} {args}
+<div class="highlight"><pre><span></span><code>{docker_runner} run {container_params} {volumes} {env_args} {image_name} {args}
 </code></pre></div>
 where:  <br />
-- <code>{docker_exec}</code> is the docker_runtime value from the Docker platform configuration file.<br />
+- <code>{docker_runner}</code> is either docker or nvidia-docker, it is specified in the docker platform configuration file 
+  (platform -&gt; name).<br />
+- <code>{container_params}</code> are the container parameters specified in the docker platform configuration file (configuration
+  -&gt; parameters). If they are not definem, the default parameters are used (<code>--rm --net=host --privileged=true</code>).
 - <code>{volumes}</code> are the mount points that the runner automatically constructs based upon the task input/output
   specifications.<br />
 - <code>{env_args}</code> is the arguments retrieved from user environment, currently, only <code>http_proxy</code> and <code>https_proxy</code> are
   supported.<br />
-- <code>{image_name}</code> is the image name from the platform configuration file.<br />
+- <code>{image_name}</code> is the image name from the platform configuration file (configuration -&gt; image).<br />
 - <code>{args}</code> is the task command line arguments, constructed automatically by the runner.  </p>
                 
               
