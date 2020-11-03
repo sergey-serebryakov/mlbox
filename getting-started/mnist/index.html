@@ -13,7 +13,7 @@
         <meta name="author" content="<MLPerf.org> mlperf@googlegroups.com">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.2">
     
     
       
@@ -21,10 +21,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.bc7e593a.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.19190aaf.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab28b872.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.24b84193.min.css">
         
       
     
@@ -779,15 +779,11 @@ documentation section provides detailed description of reference runners togethe
 Since we wanted to support Docker and Singularity runtimes, we provide <code>docker.yaml</code> and <code>singularity.yaml</code> files in
 the <code>platforms</code> subdirectory that is default location to store these types of files. Docker platform configuration is
 the following:
-<div class="highlight"><pre><span></span><code><span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlcommons_box_platform</span>
-<span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.1.0</span>
+<div class="highlight"><pre><span></span><code><span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+<span class="nt">schema_type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlbox_docker</span>
 
-<span class="nt">platform</span><span class="p">:</span>
-  <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;docker&quot;</span>
-  <span class="nt">version</span><span class="p">:</span> <span class="s">&quot;&gt;=18.01&quot;</span>
-<span class="nt">configuration</span><span class="p">:</span>
-  <span class="nt">image</span><span class="p">:</span> <span class="s">&quot;mlperf/mlbox:mnist&quot;</span>
-  <span class="nt">parameters</span><span class="p">:</span> <span class="s">&quot;--rm</span><span class="nv"> </span><span class="s">--net=host</span><span class="nv"> </span><span class="s">--privileged=true&quot;</span>
+<span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlperf/mlbox:mnist</span>   <span class="c1"># Docker image name</span>
+<span class="nt">docker_runtime</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">docker</span>      <span class="c1"># Docker executable: docker or nvidia-docker</span>
 </code></pre></div></p>
 <p>Singularity platform configuration is the following:
 <div class="highlight"><pre><span></span><code><span class="nt">schema_version</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
@@ -845,7 +841,8 @@ pip install mlcommons-box-docker mlcommons-box-singularity
 located in the <code>workspace</code> directory. All directories except <code>parameters</code> can be removed.</p>
 </blockquote>
 <h3 id="docker-runner">Docker Runner<a class="headerlink" href="#docker-runner" title="Permanent link">&para;</a></h3>
-<p>Configure MNIST box:
+<p>Configure MNIST box (this is optional step, docker runner checks if image exists, and if does not, runs <code>configure</code>
+phase automatically):
 <div class="highlight"><pre><span></span><code>mlcommons_box_docker configure --mlbox=. --platform=platforms/docker.yaml
 </code></pre></div></p>
 <p>Run two tasks - <code>download</code> (download data) and <code>train</code> (train tiny neural network):
@@ -929,8 +926,8 @@ mlcommons_box_singularity run --mlbox=. --platform=platforms/singularity.yaml --
       
     </div>
     
-      <script src="../../assets/javascripts/vendor.6a3d08fc.min.js"></script>
-      <script src="../../assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../../assets/javascripts/vendor.7e0ee788.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c1ccee15.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
