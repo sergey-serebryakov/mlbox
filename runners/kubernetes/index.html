@@ -11,7 +11,7 @@
       
       
       
-        <meta name="author" content="<MLPerf.org> mlperf@googlegroups.com">
+        <meta name="author" content="<MLPerf.org> mlcommons@googlegroups.com">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.6">
@@ -238,18 +238,55 @@
       
       
 
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" >
+    <label class="md-nav__link" for="nav-3">
+      Tutorials
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="Tutorials" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon"></span>
+        Tutorials
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../tutorials/create-mlcube/" class="md-nav__link">
+      How to Create an MLCube
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
-    <label class="md-nav__link" for="nav-3">
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+    <label class="md-nav__link" for="nav-4">
       Runners
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Runners" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
+      <label class="md-nav__title" for="nav-4">
         <span class="md-nav__icon md-icon"></span>
         Runners
       </label>
@@ -580,7 +617,7 @@ revisit the Docker platform config.</p>
   <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;docker&quot;</span>
   <span class="nt">version</span><span class="p">:</span> <span class="s">&quot;&gt;=18.01&quot;</span>
 <span class="nt">container</span><span class="p">:</span>
-  <span class="nt">image</span><span class="p">:</span> <span class="s">&quot;mlperf/mlcube:mnist&quot;</span>
+  <span class="nt">image</span><span class="p">:</span> <span class="s">&quot;mlcommons/mlcube:mnist&quot;</span>
 </code></pre></div>
 <p>With these two config files, the runner then constructs the following Kubernetes Job manifest. </p>
 <div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">batch/v1</span>
@@ -593,7 +630,7 @@ revisit the Docker platform config.</p>
     <span class="nt">spec</span><span class="p">:</span>
       <span class="nt">containers</span><span class="p">:</span>
       <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlcube-container</span>
-        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlperf/mlcube:mnist</span>
+        <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mlcommons/mlcube:mnist</span>
         <span class="nt">args</span><span class="p">:</span>
         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--data_dir=/mnt/mlcube/mlcube-input/workspace/data</span>
         <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">--model_dir=/mnt/mlcube/mlcube-output/workspace/model</span>
