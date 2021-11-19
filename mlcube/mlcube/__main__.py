@@ -10,7 +10,7 @@ import typing as t
 from omegaconf import (OmegaConf, DictConfig)
 from mlcube.config import MLCubeConfig
 from mlcube.errors import (IllegalParameterValueError, MLCubeError)
-from mlcube.parser import (CliParser, MLCubeDirectory)
+from mlcube.parser import (CliParser, MLCubeInstance)
 from mlcube.platform import Platform
 from mlcube.runner import Runner
 from mlcube.shell import Shell
@@ -59,8 +59,9 @@ def _parse_cli_args(ctx: t.Optional[click.core.Context], mlcube: t.Text, platfor
         workspace: Workspace path to use. If not specified, default workspace inside MLCube directory is used.
         resolve: if True, compute values in MLCube configuration.
     """
-    mlcube_inst: MLCubeDirectory = CliParser.parse_mlcube_arg(mlcube)
-    Validate.validate_type(mlcube_inst, MLCubeDirectory)
+    mlcube_inst: MLCubeInstance = CliParser.parse_mlcube_arg(mlcube)
+    Validate.validate_type(mlcube_inst, MLCubeInstance)
+
     if ctx is not None:
         mlcube_cli_args, task_cli_args = CliParser.parse_extra_arg(*ctx.args)
     else:
@@ -74,7 +75,7 @@ def _parse_cli_args(ctx: t.Optional[click.core.Context], mlcube: t.Text, platfor
     else:
         runner_cls, runner_config = None, None
     mlcube_config = MLCubeConfig.create_mlcube_config(
-        os.path.join(mlcube_inst.path, mlcube_inst.file), mlcube_cli_args, task_cli_args, runner_config, workspace,
+        mlcube_inst, mlcube_cli_args, task_cli_args, runner_config, workspace,
         resolve=resolve, runner_cls=runner_cls
     )
     return runner_cls, mlcube_config

@@ -2,6 +2,8 @@ import os
 import logging
 import typing as t
 from omegaconf import (OmegaConf, DictConfig)
+
+from mlcube.parser import MLCubeInstance
 from mlcube.runner import Runner
 
 logger = logging.getLogger(__name__)
@@ -46,13 +48,13 @@ class MLCubeConfig(object):
         return os.path.abspath(os.path.expanduser(value))
 
     @staticmethod
-    def create_mlcube_config(mlcube_config_file: t.Text, mlcube_cli_args: t.Optional[DictConfig] = None,
+    def create_mlcube_config(mlcube_inst: MLCubeInstance, mlcube_cli_args: t.Optional[DictConfig] = None,
                              task_cli_args: t.Optional[t.Dict] = None, runner_config: t.Optional[DictConfig] = None,
                              workspace: t.Optional[t.Text] = None, resolve: bool = True,
                              runner_cls: t.Optional[t.Type[Runner]] = None) -> DictConfig:
         """ Create MLCube mlcube merging different configs - base, global, local and cli.
         Args:
-            mlcube_config_file: Path to mlcube.yaml file.
+            mlcube_inst: MLCube instance that knows how to load MLCube configuration file.
             mlcube_cli_args: MLCube mlcube from command line.
             task_cli_args: Task parameters from command line.
             runner_config: MLCube runner configuration, usually comes from system settings file.
@@ -67,7 +69,7 @@ class MLCubeConfig(object):
             task_cli_args = {}
         if runner_config is None:
             runner_config = OmegaConf.create({})
-        logger.debug("mlcube_config_file = %s", mlcube_config_file)
+        logger.debug("mlcube_config_file = %s", mlcube_inst.uri())
         logger.debug("mlcube_cli_args = %s", mlcube_cli_args)
         logger.debug("task_cli_args = %s", task_cli_args)
         logger.debug("runner_config = %s", str(runner_config))
@@ -76,11 +78,11 @@ class MLCubeConfig(object):
         # Load MLCube configuration and maybe override parameters from command line (like -Pdocker.build_strategy=...).
         actual_workspace = '${runtime.root}/workspace' if workspace is None else MLCubeConfig.get_uri(workspace)
         mlcube_config = OmegaConf.merge(
-            OmegaConf.load(mlcube_config_file),
+            mlcube_inst.load_config(),
             mlcube_cli_args,
             OmegaConf.create({
                 'runtime': {
-                    'root': os.path.dirname(mlcube_config_file),
+                    'root': os.path.dirname(mlcube_inst.uri()),
                     'workspace': actual_workspace
                 },
                 'runner': runner_config
